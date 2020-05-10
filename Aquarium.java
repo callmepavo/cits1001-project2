@@ -41,8 +41,16 @@ public class Aquarium
      */
     public static int[] parseLine(String s)
     {
-        // TODO 2
-        return null;
+        // TODO 2 - complete
+        String[] numsAsStr = s.split(" ");
+        int[] numsAsInt = new int[numsAsStr.length];
+        
+        for (int i = 0; i < numsAsStr.length; i++)
+        {
+            numsAsInt[i] = Integer.parseInt(numsAsStr[i]);
+        }
+        
+        return numsAsInt;
     }
     
     /**
@@ -50,8 +58,8 @@ public class Aquarium
      */
     public int getSize()
     {
-        // TODO 1a
-        return -1;
+        // TODO 1a - complete
+        return size;
     }
     
     /**
@@ -59,8 +67,8 @@ public class Aquarium
      */
     public int[] getColumnTotals()
     {
-        // TODO 1b
-        return null;
+        // TODO 1b - complete
+        return columnTotals;
     }
     
     /**
@@ -68,8 +76,8 @@ public class Aquarium
      */
     public int[] getRowTotals()
     {
-        // TODO 1c
-        return null;
+        // TODO 1c - complete
+        return rowTotals;
     }
     
     /**
@@ -77,8 +85,8 @@ public class Aquarium
      */
     public int[][] getAquariums()
     {
-        // TODO 1d
-        return null;
+        // TODO 1d - complete
+        return aquariums;
     }
     
     /**
@@ -86,8 +94,8 @@ public class Aquarium
      */
     public Space[][] getSpaces()
     {
-        // TODO 1e
-        return null;
+        // TODO 1e - complete
+        return spaces;
     }
     
     /**
