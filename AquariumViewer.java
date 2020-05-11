@@ -103,16 +103,17 @@ public class AquariumViewer implements MouseListener
      */
     public void displayNumbers()
     {
-        // TODO 10
-        /*int[] rowTotals = puzzle.getRowTotals();
-        for (int r; r < rowTotals.length; r++){
-            sc.drawString(rowTotals[r].toString(), OFFSET+(BOXSIZE*r), OFFSET-BOXSIZE);
+        // TODO 10 - complete
+        sc.setFont(sc.getFont().deriveFont(1)); // Bold Font
+        int[] rowTotals = puzzle.getRowTotals();
+        for (int r = 0; r < rowTotals.length; r++){
+            sc.drawString(String.valueOf(rowTotals[r]), OFFSET-(BOXSIZE/2), OFFSET+(BOXSIZE*r)+(BOXSIZE/2), Color.black);
         }
         
         int[] columnTotals = puzzle.getColumnTotals();
-        for (int c; c < columnTotals.length; c++){
-            sc.drawString(columnTotals[c].toString(), OFFSET+(BOXSIZE*c), OFFSET-BOXSIZE);
-        }*/
+        for (int c = 0; c < columnTotals.length; c++){
+            sc.drawString(String.valueOf(columnTotals[c]), OFFSET+(BOXSIZE*c)+(BOXSIZE/2), OFFSET-(BOXSIZE/2), Color.black);
+        }
     }
     
     /**
