@@ -29,7 +29,7 @@ public class AquariumViewer implements MouseListener
         this.puzzle = puzzle;
         size = puzzle.getSize();
         
-        WINDOWSIZE = 512;
+        WINDOWSIZE = (OFFSET*2) + (BOXSIZE*size);
         sc = new SimpleCanvas("Aquarium Puzzle - Zach & Oliver", WINDOWSIZE, WINDOWSIZE, Color.white);
         
     }
@@ -91,7 +91,7 @@ public class AquariumViewer implements MouseListener
      */
     public void displayGrid()
     {
-        // TODO 9
+        // TODO 9 - complete
         for (int s = 0; s < size+1; s++) {
             sc.drawLine(OFFSET+(BOXSIZE*s), OFFSET, OFFSET+(BOXSIZE*s), OFFSET+(size*BOXSIZE), Color.black);
             sc.drawLine(OFFSET, OFFSET+(BOXSIZE*s), OFFSET+(size*BOXSIZE), OFFSET+(BOXSIZE*s), Color.black);
@@ -104,6 +104,15 @@ public class AquariumViewer implements MouseListener
     public void displayNumbers()
     {
         // TODO 10
+        /*int[] rowTotals = puzzle.getRowTotals();
+        for (int r; r < rowTotals.length; r++){
+            sc.drawString(rowTotals[r].toString(), OFFSET+(BOXSIZE*r), OFFSET-BOXSIZE);
+        }
+        
+        int[] columnTotals = puzzle.getColumnTotals();
+        for (int c; c < columnTotals.length; c++){
+            sc.drawString(columnTotals[c].toString(), OFFSET+(BOXSIZE*c), OFFSET-BOXSIZE);
+        }*/
     }
     
     /**
