@@ -26,6 +26,12 @@ public class AquariumViewer implements MouseListener
     public AquariumViewer(Aquarium puzzle)
     {
         // TODO 8
+        this.puzzle = puzzle;
+        size = puzzle.getSize();
+        
+        WINDOWSIZE = 512;
+        sc = new SimpleCanvas("Aquarium Puzzle - Zach & Oliver", WINDOWSIZE, WINDOWSIZE, Color.white);
+        
     }
     
     /**
@@ -50,8 +56,8 @@ public class AquariumViewer implements MouseListener
      */
     public Aquarium getPuzzle()
     {
-        // TODO 7a
-        return null;
+        // TODO 7a - complete
+        return puzzle;
     }
     
     /**
@@ -59,8 +65,8 @@ public class AquariumViewer implements MouseListener
      */
     public int getSize()
     {
-        // TODO 7b
-        return -1;
+        // TODO 7b - complete
+        return size;
     }
 
     /**
@@ -68,8 +74,8 @@ public class AquariumViewer implements MouseListener
      */
     public SimpleCanvas getCanvas()
     {
-        // TODO 7c
-        return null;
+        // TODO 7c - complete
+        return sc;
     }
     
     /**
@@ -86,6 +92,10 @@ public class AquariumViewer implements MouseListener
     public void displayGrid()
     {
         // TODO 9
+        for (int s = 0; s < size; s++) {
+            sc.drawLine(OFFSET+(BOXSIZE*s), OFFSET, OFFSET+(BOXSIZE*s), WINDOWSIZE-OFFSET, Color.black);
+            sc.drawLine(OFFSET, OFFSET+(BOXSIZE*s), WINDOWSIZE-OFFSET, OFFSET+(BOXSIZE*s), Color.black);
+        }
     }
     
     /**
