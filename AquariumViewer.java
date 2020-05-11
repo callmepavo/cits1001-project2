@@ -104,15 +104,15 @@ public class AquariumViewer implements MouseListener
     public void displayNumbers()
     {
         // TODO 10 - complete
-        sc.setFont(sc.getFont().deriveFont(1)); // Bold Font
+        sc.setFont(new Font("Arial",1,20));
         int[] rowTotals = puzzle.getRowTotals();
         for (int r = 0; r < rowTotals.length; r++){
-            sc.drawString(String.valueOf(rowTotals[r]), OFFSET-(BOXSIZE/2), OFFSET+(BOXSIZE*r)+(BOXSIZE/2), Color.black);
+            sc.drawString(String.valueOf(rowTotals[r]), OFFSET-(BOXSIZE/2)-4, OFFSET+(BOXSIZE*r)+(BOXSIZE/2)+8, Color.black);
         }
         
         int[] columnTotals = puzzle.getColumnTotals();
         for (int c = 0; c < columnTotals.length; c++){
-            sc.drawString(String.valueOf(columnTotals[c]), OFFSET+(BOXSIZE*c)+(BOXSIZE/2), OFFSET-(BOXSIZE/2), Color.black);
+            sc.drawString(String.valueOf(columnTotals[c]), OFFSET+(BOXSIZE*c)+(BOXSIZE/2)-4, OFFSET-(BOXSIZE/2)+8, Color.black);
         }
     }
     
@@ -129,7 +129,13 @@ public class AquariumViewer implements MouseListener
      */
     public void displayButtons()
     {
-        // TODO 12
+        // TODO 12 - complete
+        sc.setFont(new Font("Arial",1,20));
+        sc.drawRectangle(0, WINDOWSIZE-BOXSIZE, WINDOWSIZE/2, WINDOWSIZE, Color.green);
+        sc.drawString("CHECK", BOXSIZE+30, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
+        
+        sc.drawRectangle(WINDOWSIZE/2, WINDOWSIZE-BOXSIZE, WINDOWSIZE, WINDOWSIZE, Color.red);
+        sc.drawString("CLEAR", BOXSIZE+(WINDOWSIZE/2)+30, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
     }
     
     /**
