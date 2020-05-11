@@ -165,6 +165,28 @@ public class AquariumViewer implements MouseListener
     public void mousePressed(MouseEvent e) 
     {
         // TODO 15
+        int x = e.getX();
+        int y = e.getY();
+        System.out.println(x+" "+y);
+        // If true, click was inside the grid
+        if ((OFFSET < x && x < WINDOWSIZE-OFFSET) && (OFFSET < y && y < WINDOWSIZE-OFFSET)) {
+            int r = (y-OFFSET)/BOXSIZE;
+            int c = (x-OFFSET)/BOXSIZE;
+            
+            if (e.getButton() == MouseEvent.BUTTON1) { puzzle.leftClick(r,c); }
+            if (e.getButton() == MouseEvent.BUTTON2) { puzzle.rightClick(r,c); }
+            
+            this.updateSquare(r,c);
+            this.displayGrid();
+            this.displayAquariums();
+        } else if (WINDOWSIZE-OFFSET < y) {
+            // If true check button pressed, else clear button pressed
+            if (x < WINDOWSIZE/2) {
+                CheckSolution.isSolution(puzzle);
+            } else {
+                puzzle.clear();
+            }
+        }
     }
     public void mouseClicked(MouseEvent e) {}
     public void mouseReleased(MouseEvent e) {}
