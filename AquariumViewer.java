@@ -31,7 +31,7 @@ public class AquariumViewer implements MouseListener
         
         WINDOWSIZE = (OFFSET*2) + (BOXSIZE*size);
         sc = new SimpleCanvas("Aquarium Puzzle - Zach & Oliver", WINDOWSIZE, WINDOWSIZE, Color.white);
-        
+        sc.addMouseListener(this);
     }
     
     /**
@@ -146,9 +146,11 @@ public class AquariumViewer implements MouseListener
     {
         // TODO 14 - complete
         Color material;
-        
-        if (puzzle.getSpaces()[r][c] == Space.WATER) {
+        Space square = puzzle.getSpaces()[r][c];
+        if (square == Space.WATER) {
             material = Color.blue;
+        } else if (square == Space.AIR) {
+            material = Color.pink;
         } else {
             material = Color.white;
         }
@@ -167,11 +169,10 @@ public class AquariumViewer implements MouseListener
         // TODO 15
         int x = e.getX();
         int y = e.getY();
-        System.out.println(x+" "+y);
         // If true, click was inside the grid
         if ((OFFSET < x && x < WINDOWSIZE-OFFSET) && (OFFSET < y && y < WINDOWSIZE-OFFSET)) {
-            int r = (y-OFFSET)/BOXSIZE;
-            int c = (x-OFFSET)/BOXSIZE;
+            int r = (x-OFFSET)/BOXSIZE;
+            int c = (y-OFFSET)/BOXSIZE;
             
             if (e.getButton() == MouseEvent.BUTTON1) { puzzle.leftClick(r,c); }
             if (e.getButton() == MouseEvent.BUTTON2) { puzzle.rightClick(r,c); }
@@ -185,6 +186,7 @@ public class AquariumViewer implements MouseListener
                 CheckSolution.isSolution(puzzle);
             } else {
                 puzzle.clear();
+                this.displayPuzzle();
             }
         }
     }
