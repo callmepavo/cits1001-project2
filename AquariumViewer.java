@@ -32,6 +32,8 @@ public class AquariumViewer implements MouseListener
         WINDOWSIZE = (OFFSET*2) + (BOXSIZE*size);
         sc = new SimpleCanvas("Aquarium Puzzle - Zach & Oliver", WINDOWSIZE, WINDOWSIZE, Color.white);
         sc.addMouseListener(this);
+        
+        this.displayPuzzle();
     }
     
     /**
@@ -84,6 +86,17 @@ public class AquariumViewer implements MouseListener
     private void displayPuzzle()
     {
         // TODO 13
+        Space[][] spaces = puzzle.getSpaces();
+        for (int r = 0; r < spaces.length; r++){
+            for (int c = 0; c < spaces[r].length; c++) {
+                this.updateSquare(r,c);
+            }
+        }
+        
+        this.displayGrid();
+        this.displayButtons();
+        this.displayNumbers();
+        this.displayAquariums();
     }
     
     /**
@@ -149,13 +162,15 @@ public class AquariumViewer implements MouseListener
         Space square = puzzle.getSpaces()[r][c];
         if (square == Space.WATER) {
             material = Color.blue;
-        } else if (square == Space.AIR) {
-            material = Color.pink;
         } else {
             material = Color.white;
         }
         
         sc.drawRectangle(OFFSET+(BOXSIZE*r), OFFSET+(BOXSIZE*c), OFFSET+(BOXSIZE*(r+1)), OFFSET+(BOXSIZE*(c+1)), material);
+        if (square == Space.AIR) {
+            sc.drawDisc(OFFSET+(BOXSIZE*r)+(BOXSIZE/2),OFFSET+(BOXSIZE*c)+(BOXSIZE/2), BOXSIZE/4, Color.pink);
+            sc.drawDisc(OFFSET+(BOXSIZE*r)+(BOXSIZE/2),OFFSET+(BOXSIZE*c)+(BOXSIZE/2), BOXSIZE/6, Color.white);
+        }
     }
     
     /**
@@ -175,7 +190,7 @@ public class AquariumViewer implements MouseListener
             int c = (y-OFFSET)/BOXSIZE;
             
             if (e.getButton() == MouseEvent.BUTTON1) { puzzle.leftClick(r,c); }
-            if (e.getButton() == MouseEvent.BUTTON2) { puzzle.rightClick(r,c); }
+            if (e.getButton() == MouseEvent.BUTTON3) { puzzle.rightClick(r,c); }
             
             this.updateSquare(r,c);
             this.displayGrid();
