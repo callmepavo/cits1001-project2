@@ -144,7 +144,16 @@ public class AquariumViewer implements MouseListener
      */
     public void updateSquare(int r, int c)
     {
-        // TODO 14
+        // TODO 14 - complete
+        Color material;
+        
+        if (puzzle.getSpaces()[r][c] == Space.WATER) {
+            material = Color.blue;
+        } else {
+            material = Color.white;
+        }
+        
+        sc.drawRectangle(OFFSET+(BOXSIZE*r), OFFSET+(BOXSIZE*c), OFFSET+(BOXSIZE*(r+1)), OFFSET+(BOXSIZE*(c+1)), material);
     }
     
     /**
