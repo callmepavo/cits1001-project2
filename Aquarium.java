@@ -5,6 +5,7 @@
  * @author Lyndon While 
  * @version 2020
  */
+import java.util.ArrayList;
 public class Aquarium
 {
     private int   size;         // the board is size x size
@@ -23,7 +24,27 @@ public class Aquarium
      */
     public Aquarium(String filename)
     {
-        // TODO 3
+        // TODO 3 - complete I think
+        FileIO file = new FileIO(filename);
+        ArrayList<String> lines = file.getLines();
+        columnTotals = parseLine(lines.get(0));
+        rowTotals = parseLine(lines.get(1));
+        size = rowTotals.length;
+        
+        aquariums = new  int[size][size];
+        for (int i = 0; i < size; i++)
+        {
+            aquariums[i] = parseLine(lines.get(i+3));
+        }
+        
+        spaces = new Space[size][size];
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                spaces[x][y] = Space.EMPTY;
+            }
+        }
     }
     
     /**
@@ -104,7 +125,18 @@ public class Aquarium
      */
     public void leftClick(int r, int c)
     {
-        // TODO 4
+        // TODO 4 - needs testing when graphics are done
+        if (r < size && c < size)
+        {
+            if (spaces[r][c] == Space.WATER)
+            {
+                spaces[r][c] = Space.EMPTY;
+            }
+            else
+            {
+                spaces[r][c] = Space.WATER;
+            }
+        }
     }
     
     /**
@@ -113,7 +145,18 @@ public class Aquarium
      */
     public void rightClick(int r, int c)
     {
-        // TODO 5
+        // TODO 5 - needs testing when graphics are done
+        if (r < size && c < size)
+        {
+            if (spaces[r][c] == Space.AIR)
+            {
+                spaces[r][c] = Space.EMPTY;
+            }
+            else
+            {
+                spaces[r][c] = Space.AIR;
+            }
+        }
     }
     
     /**
@@ -121,6 +164,13 @@ public class Aquarium
      */
     public void clear()
     {
-        // TODO 6
+        // TODO 6 - needs testing when graphics are done
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                spaces[x][y] = Space.EMPTY;
+            }
+        }
     }
 }
