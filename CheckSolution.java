@@ -26,7 +26,7 @@ public class CheckSolution
         for (int r = 0; r < spaces.length; r++) {
             int count = 0;
             for (int c = 0; c < spaces[r].length; c++) {
-                if (spaces[c][r] == Space.WATER) {
+                if (spaces[r][c] == Space.WATER) {
                     count++;
                 }
             }
@@ -43,14 +43,14 @@ public class CheckSolution
         // TODO 17 - complete
         Space[][] spaces = p.getSpaces();
         int[] columnCount = new int[p.getSize()];
-        for (int r = 0; r < spaces.length; r++) {
+        for (int c = 0; c < spaces.length; c++) {
             int count = 0;
-            for (int c = 0; c < spaces[r].length; c++) {
+            for (int r = 0; r < spaces[c].length; r++) {
                 if (spaces[r][c] == Space.WATER) {
                     count++;
                 }
             }
-            columnCount[r] = count;
+            columnCount[c] = count;
         }
         return columnCount;
     }
@@ -117,7 +117,48 @@ public class CheckSolution
     public static String isAquariumOK(Aquarium p, int t)
     {
         // TODO 19
-        return null;
+        int[][] aquariums = p.getAquariums();
+        boolean waterBegun = false;
+        boolean isOK = true;
+        int[] rowInfo = new int[2];
+        String coords = "";
+        for (int i = 0; i < aquariums.length; i++)
+        {
+            rowInfo = rowStatus(p, t, i);
+            coords = i + "," + rowInfo[1];
+            
+            if (rowInfo[0] == 0)
+            {
+                if (waterBegun)
+                {
+                    isOK = true;
+                }
+            }
+            else if (rowInfo[0] == 1)
+            {
+                waterBegun = true;
+            }
+            else if (rowInfo[0] == 2)
+            {
+                if (waterBegun)
+                {
+                    isOK = false;
+                    break;
+                }
+            }
+            else if (rowInfo[0] == 3)
+            {
+                isOK = false;
+                break;
+            } 
+        }
+        
+        if (!isOK)
+        {
+            return coords;
+        }
+        
+        return "";
     }
     
     /**
@@ -130,6 +171,38 @@ public class CheckSolution
     public static String isSolution(Aquarium p)
     {
         // TODO 20
-        return null;
+        int[] correctRowTotals = p.getRowTotals();
+        int[] correctColumnTotals = p.getColumnTotals();
+        int[] actualRowTotals = rowCounts(p);
+        int[] actualColumnTotals = columnCounts(p);
+        
+        String output = "\u2713\u2713\u2713";
+        
+        for (int i = 0; i < p.getSize(); i++)
+        {
+            if (correctColumnTotals[i] != actualColumnTotals[i])
+            {
+                output = "Column " + i + " is wrong";
+                break;
+            }
+            if (correctRowTotals[i] != actualRowTotals[i])
+            {
+                output = "Row " + i + " is wrong";
+                break;
+            }
+            
+        }
+        
+        String coords = "";
+        for (int t = 0; t < p.getSize(); t++)
+        {
+            coords = isAquariumOK(p, t);
+            if (!coords.equals(""))
+            {
+                output = "The aquarium at " + coords + " is wrong";
+            }
+        }
+        System.out.println(output);
+        return output;
     }
 }
