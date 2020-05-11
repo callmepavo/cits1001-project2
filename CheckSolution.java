@@ -76,7 +76,6 @@ public class CheckSolution
         int tSpacesWithWater = 0;
         
         status[0] = 0;
-        
         for (int i = 0; i < aquariums[r].length; i++)
         {
             if (aquariums[r][i] == t)
@@ -86,10 +85,10 @@ public class CheckSolution
                 if (spaces[r][i] == Space.WATER) { tSpacesWithWater++; }
             }
         }
-        
+
         if (tSpaces == 0)
         {
-            status[1] = 0;
+            status[1] = -1;
         }
         else if (tSpacesWithWater == tSpaces)
         {
@@ -157,7 +156,6 @@ public class CheckSolution
         {
             return coords;
         }
-        
         return "";
     }
     
@@ -183,18 +181,32 @@ public class CheckSolution
             if (correctColumnTotals[i] != actualColumnTotals[i])
             {
                 output = "Column " + i + " is wrong";
-                break;
+                break;//return output;
             }
             if (correctRowTotals[i] != actualRowTotals[i])
             {
                 output = "Row " + i + " is wrong";
-                break;
+                break;//return output;
             }
             
         }
         
+        // Find highest group number
+        int[][] aquariums = p.getAquariums();
+        int highestGroup = 0;
+        for (int[] row : aquariums)
+        {
+            for (int i : row)
+            {
+                if (i > highestGroup)
+                {
+                    highestGroup = i;
+                }
+            }
+        }
+        
         String coords = "";
-        for (int t = 0; t < p.getSize(); t++)
+        for (int t = 0; t < highestGroup; t++)
         {
             coords = isAquariumOK(p, t);
             if (!coords.equals(""))
