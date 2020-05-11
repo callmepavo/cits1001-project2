@@ -92,9 +92,9 @@ public class AquariumViewer implements MouseListener
     public void displayGrid()
     {
         // TODO 9
-        for (int s = 0; s < size; s++) {
-            sc.drawLine(OFFSET+(BOXSIZE*s), OFFSET, OFFSET+(BOXSIZE*s), WINDOWSIZE-OFFSET, Color.black);
-            sc.drawLine(OFFSET, OFFSET+(BOXSIZE*s), WINDOWSIZE-OFFSET, OFFSET+(BOXSIZE*s), Color.black);
+        for (int s = 0; s < size+1; s++) {
+            sc.drawLine(OFFSET+(BOXSIZE*s), OFFSET, OFFSET+(BOXSIZE*s), OFFSET+(size*BOXSIZE), Color.black);
+            sc.drawLine(OFFSET, OFFSET+(BOXSIZE*s), OFFSET+(size*BOXSIZE), OFFSET+(BOXSIZE*s), Color.black);
         }
     }
     
