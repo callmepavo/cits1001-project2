@@ -152,12 +152,10 @@ public class AquariumViewer implements MouseListener
                 int group = aquariums[x][y];
                 if ( (x+1 < size) && (group != aquariums[x+1][y]) )
                 {
-                    System.out.println(x+"," + y +": south");
                     sc.drawRectangle(OFFSET + y*BOXSIZE - 1, OFFSET + (x+1)*BOXSIZE-2, OFFSET + (y+1)*BOXSIZE + 1  , OFFSET + (x+1)*BOXSIZE + 2, Color.RED);
                 }
                 if ( (y+1 < size) && (group != aquariums[x][y+1]) )
                 {
-                    System.out.println(x+"," + y +": east");
                     sc.drawRectangle(OFFSET + (y+1)*BOXSIZE - 1, OFFSET + x*BOXSIZE - 1, OFFSET + (y+1)*BOXSIZE+2, OFFSET+(x+1)*BOXSIZE+2, Color.RED);
                 }
             }
