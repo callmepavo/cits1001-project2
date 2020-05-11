@@ -67,8 +67,44 @@ public class CheckSolution
      */
     public static int[] rowStatus(Aquarium p, int t, int r)
     {
-        // TODO 18
-        return null;
+        // TODO 18 - completed
+        int[] status = new int[2];
+        int[][] aquariums = p.getAquariums();
+        Space[][] spaces = p.getSpaces();
+        
+        int tSpaces = 0;
+        int tSpacesWithWater = 0;
+        
+        status[0] = 0;
+        
+        for (int i = 0; i < aquariums[r].length; i++)
+        {
+            if (aquariums[r][i] == t)
+            {
+                status[1] = i;
+                tSpaces++;
+                if (spaces[r][i] == Space.WATER) { tSpacesWithWater++; }
+            }
+        }
+        
+        if (tSpaces == 0)
+        {
+            status[1] = 0;
+        }
+        else if (tSpacesWithWater == tSpaces)
+        {
+            status[0] = 1;
+        }
+        else if (tSpacesWithWater == 0)
+        {
+            status[0] = 2;
+        }
+        else
+        {
+            status[0] = 3;
+        }
+
+        return status;
     }
     
     /**
