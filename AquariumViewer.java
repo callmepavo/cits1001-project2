@@ -31,7 +31,8 @@ public class AquariumViewer implements MouseListener
         
         WINDOWSIZE = (OFFSET*2) + (BOXSIZE*size);
         sc = new SimpleCanvas("Aquarium Puzzle - Zach & Oliver", WINDOWSIZE, WINDOWSIZE, Color.white);
-        
+        displayGrid();
+        displayAquariums();
     }
     
     /**
@@ -121,6 +122,32 @@ public class AquariumViewer implements MouseListener
     public void displayAquariums()
     {
         // TODO 11
+        int gridSize = BOXSIZE * size;
+        // Draw around entire grid
+        sc.drawRectangle(OFFSET-1, OFFSET-1, OFFSET+gridSize+1, OFFSET+2, Color.RED);//top
+        sc.drawRectangle(OFFSET-1, OFFSET-1, OFFSET+2, OFFSET+gridSize+1, Color.RED);//left
+        sc.drawRectangle(OFFSET-1, OFFSET+gridSize-2, OFFSET+gridSize+1, OFFSET+gridSize+1, Color.RED);//bottom
+        sc.drawRectangle(OFFSET+gridSize-2, OFFSET-1, OFFSET+gridSize+1, OFFSET+gridSize+1, Color.RED);//right
+        
+        int[][] aquariums = puzzle.getAquariums();
+        // Analyse each cell
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                int group = aquariums[x][y];
+                if ( (x+1 < size) && (group != aquariums[x+1][y]) )
+                {
+                    System.out.println(x+"," + y +": south");
+                    sc.drawRectangle(OFFSET + y*BOXSIZE - 1, OFFSET + (x+1)*BOXSIZE-2, OFFSET + (y+1)*BOXSIZE + 1  , OFFSET + (x+1)*BOXSIZE + 2, Color.RED);
+                }
+                if ( (y+1 < size) && (group != aquariums[x][y+1]) )
+                {
+                    System.out.println(x+"," + y +": east");
+                    sc.drawRectangle(OFFSET + (y+1)*BOXSIZE - 1, OFFSET + x*BOXSIZE - 1, OFFSET + (y+1)*BOXSIZE+2, OFFSET+(x+1)*BOXSIZE+2, Color.RED);
+                }
+            }
+        }
     }
     
     /**
