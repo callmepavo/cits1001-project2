@@ -1,4 +1,4 @@
-
+import java.util.ArrayList;
 /**
  * Aquarium represents a single problem in the game Aquarium.
  *
@@ -23,7 +23,21 @@ public class Aquarium
      */
     public Aquarium(String filename)
     {
-        // TODO 3
+        // TODO 3 - complete
+        FileIO file = new FileIO(filename);
+        ArrayList<String> lines = file.getLines();
+        
+        // Get first two lines from file as column totals
+        columnTotals = this.parseLine(lines.get(0));
+        rowTotals = this.parseLine(lines.get(1));
+        
+        size = columnTotals.length;
+        aquariums = new int[columnTotals.length][rowTotals.length];
+        spaces = new Space[columnTotals.length][rowTotals.length];
+        
+        for (int i = 0; i < size; i++) {
+            aquariums[i] = this.parseLine(lines.get(i+3));
+        }
     }
     
     /**
