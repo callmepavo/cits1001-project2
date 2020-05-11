@@ -32,8 +32,8 @@ public class Aquarium
         rowTotals = this.parseLine(lines.get(1));
         
         size = columnTotals.length;
-        aquariums = new int[columnTotals.length][rowTotals.length];
-        spaces = new Space[columnTotals.length][rowTotals.length];
+        aquariums = new int[rowTotals.length][columnTotals.length];
+        spaces = new Space[rowTotals.length][columnTotals.length];
         
         for (int i = 0; i < size; i++) {
             aquariums[i] = this.parseLine(lines.get(i+3));
@@ -118,7 +118,17 @@ public class Aquarium
      */
     public void leftClick(int r, int c)
     {
-        // TODO 4
+        // TODO 4 - complete
+        if (r <= rowTotals.length && r >= 0) {
+            if (c <= columnTotals.length && c >= 0) {
+                Space clicked = spaces[r][c];
+                if (clicked == Space.WATER) {
+                    spaces[r][c] = Space.EMPTY;
+                } else {
+                    spaces[r][c] = Space.WATER;
+                }
+            }
+        }
     }
     
     /**
@@ -127,7 +137,17 @@ public class Aquarium
      */
     public void rightClick(int r, int c)
     {
-        // TODO 5
+        // TODO 5 - complete
+        if (r <= rowTotals.length && r >= 0) {
+            if (c <= columnTotals.length && c >= 0) {
+                Space clicked = spaces[r][c];
+                if (clicked == Space.AIR) {
+                    spaces[r][c] = Space.EMPTY;
+                } else {
+                    spaces[r][c] = Space.AIR;
+                }
+            }
+        }
     }
     
     /**
@@ -135,6 +155,7 @@ public class Aquarium
      */
     public void clear()
     {
-        // TODO 6
+        // TODO 6 - complete
+        spaces = new Space[rowTotals.length][columnTotals.length];
     }
 }
