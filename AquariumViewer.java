@@ -233,7 +233,7 @@ public class AquariumViewer implements MouseListener
             if (x < WINDOWSIZE/2) {
                 sc.setFont(new Font("Segoe UI Symbol",1,20));
                 sc.drawRectangle(0,0,WINDOWSIZE,WINDOWSIZE,Color.white);
-                sc.drawString(CheckSolution.isSolution(puzzle), 32, WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, Color.black);
+                sc.drawString(CheckSolution.isSolution(puzzle), 32, WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, foreColor);
                 this.displayPuzzle();
             } else {
                 puzzle.clear();
