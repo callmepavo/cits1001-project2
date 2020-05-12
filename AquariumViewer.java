@@ -25,7 +25,7 @@ public class AquariumViewer implements MouseListener
      */
     public AquariumViewer(Aquarium puzzle)
     {
-        // TODO 8 - complete7
+        // TODO 8 - complete
         this.puzzle = puzzle;
         size = puzzle.getSize();
         
@@ -118,7 +118,7 @@ public class AquariumViewer implements MouseListener
     public void displayNumbers()
     {
         // TODO 10 - complete
-        sc.setFont(new Font("Arial",1,20));
+        sc.setFont(new Font("Consolas",1,20));
         int[] rowTotals = puzzle.getRowTotals();
         for (int r = 0; r < rowTotals.length; r++){
             sc.drawString(String.valueOf(rowTotals[r]), OFFSET-(BOXSIZE/2)-4, OFFSET+(BOXSIZE*r)+(BOXSIZE/2)+8, Color.black);
@@ -156,7 +156,7 @@ public class AquariumViewer implements MouseListener
                 }
                 if ( (y+1 < size) && (group != aquariums[x][y+1]) )
                 {
-                    sc.drawRectangle(OFFSET + (y+1)*BOXSIZE - 1, OFFSET + x*BOXSIZE - 1, OFFSET + (y+1)*BOXSIZE+2, OFFSET+(x+1)*BOXSIZE+2, Color.RED);
+                    sc.drawRectangle(OFFSET + (y+1)*BOXSIZE - 1, OFFSET + x*BOXSIZE - 1, OFFSET + (y+1)*BOXSIZE+2, OFFSET+(x+1)*BOXSIZE+1, Color.RED);
                 }
             }
         }
@@ -168,7 +168,7 @@ public class AquariumViewer implements MouseListener
     public void displayButtons()
     {
         // TODO 12 - complete
-        sc.setFont(new Font("Arial",1,20));
+        sc.setFont(new Font("Consolas",1,20));
         sc.drawRectangle(0, WINDOWSIZE-BOXSIZE, WINDOWSIZE/2, WINDOWSIZE, Color.green);
         sc.drawString("CHECK", (WINDOWSIZE/4)-32, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
         
@@ -223,7 +223,7 @@ public class AquariumViewer implements MouseListener
         } else if (WINDOWSIZE-OFFSET < y) {
             // If true check button pressed, else clear button pressed
             if (x < WINDOWSIZE/2) {
-                sc.setFont(new Font("Arial",1,20));
+                sc.setFont(new Font("Consolas",1,20));
                 sc.drawRectangle(0,0,WINDOWSIZE,WINDOWSIZE,Color.white);
                 sc.drawString(CheckSolution.isSolution(puzzle), 32, WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, Color.black);
                 this.displayPuzzle();
