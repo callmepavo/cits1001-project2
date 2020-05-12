@@ -204,17 +204,7 @@ public class CheckSolution
         
         // Find highest group number
         int[][] aquariums = p.getAquariums();
-        int highestGroup = 0;
-        for (int[] row : aquariums)
-        {
-            for (int cell : row)
-            {
-                if (cell > highestGroup)
-                {
-                    highestGroup = cell;
-                }
-            }
-        }
+        int highestGroup = aquariums[aquariums.length-1][aquariums[0].length-1];
         
         for (int t = 0; t < highestGroup; t++)
         {
