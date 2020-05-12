@@ -22,11 +22,12 @@ public class AquariumViewer implements MouseListener
     private int        size; // the puzzle is size x size
     private SimpleCanvas sc; // the display window
     
-    private Color foreColor = new Color(245,245,245);
-    private Color backColor = new Color(20,25,50);
-    private Color waterColor = new Color(45,130,200);
-    private Color altColor = new Color(180,45,45);
-
+    private Color foreColor = Color.black;
+    private Color backColor = Color.white;
+    private Color waterColor = Color.blue;
+    private Color altColor = Color.red;
+    private boolean darkMode = false;
+    
     /**
      * Main constructor for objects of class AquariumViewer.
      * Sets all fields, and displays the initial puzzle.
@@ -177,11 +178,15 @@ public class AquariumViewer implements MouseListener
     {
         // TODO 12 - complete
         sc.setFont(new Font("Consolas",1,20));
+        
         sc.drawRectangle(0, WINDOWSIZE-BOXSIZE, WINDOWSIZE/2, WINDOWSIZE, Color.green);
         sc.drawString("CHECK", (WINDOWSIZE/4)-32, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
         
         sc.drawRectangle(WINDOWSIZE/2, WINDOWSIZE-BOXSIZE, WINDOWSIZE, WINDOWSIZE, Color.red);
         sc.drawString("CLEAR", (WINDOWSIZE/4)*3-32, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
+        
+        sc.drawRectangle(0,0,WINDOWSIZE,BOXSIZE,Color.cyan);
+        sc.drawString("TOGGLE DARK MODE", (WINDOWSIZE/4), (BOXSIZE/4)*3-4, Color.black);
     }
     
     /**
@@ -204,6 +209,33 @@ public class AquariumViewer implements MouseListener
             sc.drawDisc(OFFSET+(BOXSIZE*c)+(BOXSIZE/2),OFFSET+(BOXSIZE*r)+(BOXSIZE/2), BOXSIZE/4, altColor);
             sc.drawDisc(OFFSET+(BOXSIZE*c)+(BOXSIZE/2),OFFSET+(BOXSIZE*r)+(BOXSIZE/2), BOXSIZE/6, backColor);
         }
+    }
+    /**
+     * Toggles dark mode on and off.
+     * Updates colors and redraws canvas elements.
+     * Clears puzzle arrangement as to not cause errors.
+     */
+    public void toggleDarkMode()
+    {
+        if (!darkMode)
+        {
+            foreColor = new Color(245,245,245);
+            backColor = new Color(20,25,50);
+            waterColor = new Color(45,130,200);
+            altColor = new Color(180,45,45);
+
+        }
+        else
+        {
+            foreColor = Color.black;
+            backColor = Color.white;
+            waterColor = Color.blue;
+            altColor = Color.red;
+        }
+        darkMode = !darkMode;
+        puzzle.clear();
+        sc.drawRectangle(0,0,WINDOWSIZE,WINDOWSIZE,backColor);
+        displayPuzzle();
     }
     
     /**
@@ -228,7 +260,7 @@ public class AquariumViewer implements MouseListener
             this.updateSquare(r,c);
             this.displayGrid();
             this.displayAquariums();
-        } else if (WINDOWSIZE-OFFSET < y) {
+        } else if (WINDOWSIZE-OFFSET/2 < y) {
             // If true check button pressed, else clear button pressed
             if (x < WINDOWSIZE/2) {
                 sc.setFont(new Font("Segoe UI Symbol",1,20));
@@ -239,6 +271,8 @@ public class AquariumViewer implements MouseListener
                 puzzle.clear();
                 this.displayPuzzle();
             }
+        } else if (OFFSET/2 > y) {
+            toggleDarkMode();
         }
     }
     public void mouseClicked(MouseEvent e) {}
