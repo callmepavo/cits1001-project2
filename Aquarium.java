@@ -24,7 +24,7 @@ public class Aquarium
      */
     public Aquarium(String filename)
     {
-        // TODO 3 - complete I think
+        // TODO 3 - complete
         FileIO file = new FileIO(filename);
         ArrayList<String> lines = file.getLines();
         columnTotals = parseLine(lines.get(0));
@@ -125,7 +125,7 @@ public class Aquarium
      */
     public void leftClick(int r, int c)
     {
-        // TODO 4 - needs testing when graphics are done
+        // TODO 4 - complete
         if (r < size && c < size)
         {
             if (spaces[r][c] == Space.WATER)
@@ -145,7 +145,7 @@ public class Aquarium
      */
     public void rightClick(int r, int c)
     {
-        // TODO 5 - needs testing when graphics are done
+        // TODO 5 - complete
         if (r < size && c < size)
         {
             if (spaces[r][c] == Space.AIR)
@@ -164,7 +164,7 @@ public class Aquarium
      */
     public void clear()
     {
-        // TODO 6 - needs testing when graphics are done
+        // TODO 6 - complete
         for (int x = 0; x < size; x++)
         {
             for (int y = 0; y < size; y++)

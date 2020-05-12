@@ -206,7 +206,7 @@ public class AquariumViewer implements MouseListener
      */
     public void mousePressed(MouseEvent e) 
     {
-        // TODO 15
+        // TODO 15 - complete
         int x = e.getX();
         int y = e.getY();
         // If true, click was inside the grid

@@ -128,7 +128,7 @@ public class CheckSolution
      */
     public static String isAquariumOK(Aquarium p, int t)
     {
-        // TODO 19
+        // TODO 19 - complete
         int[][] aquariums = p.getAquariums();
         boolean waterBegun = false;
         boolean isOK = true;
@@ -181,7 +181,7 @@ public class CheckSolution
      */
     public static String isSolution(Aquarium p)
     {
-        // TODO 20
+        // TODO 20 - complete
         int[] correctRowTotals = p.getRowTotals();
         int[] correctColumnTotals = p.getColumnTotals();
         int[] actualRowTotals = rowCounts(p);
@@ -197,7 +197,6 @@ public class CheckSolution
             {
                 return "Row " + i + " is wrong";
             }
-            
         }
         
         // Find highest group number
