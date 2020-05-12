@@ -1,10 +1,11 @@
-
+import java.util.ArrayList;
 /**
  * Aquarium represents a single problem in the game Aquarium.
  *
  * @author Lyndon While 
  * @version 2020
  */
+import java.util.ArrayList;
 public class Aquarium
 {
     private int   size;         // the board is size x size
@@ -23,7 +24,27 @@ public class Aquarium
      */
     public Aquarium(String filename)
     {
-        // TODO 3
+        // TODO 3 - complete
+        FileIO file = new FileIO(filename);
+        ArrayList<String> lines = file.getLines();
+        columnTotals = parseLine(lines.get(0));
+        rowTotals = parseLine(lines.get(1));
+        size = rowTotals.length;
+        
+        aquariums = new  int[size][size];
+        for (int i = 0; i < size; i++)
+        {
+            aquariums[i] = parseLine(lines.get(i+3));
+        }
+        
+        spaces = new Space[size][size];
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                spaces[x][y] = Space.EMPTY;
+            }
+        }
     }
     
     /**
@@ -41,8 +62,16 @@ public class Aquarium
      */
     public static int[] parseLine(String s)
     {
-        // TODO 2
-        return null;
+        // TODO 2 - complete
+        String[] numsAsStr = s.split(" ");
+        int[] numsAsInt = new int[numsAsStr.length];
+        
+        for (int i = 0; i < numsAsStr.length; i++)
+        {
+            numsAsInt[i] = Integer.parseInt(numsAsStr[i]);
+        }
+        
+        return numsAsInt;
     }
     
     /**
@@ -50,8 +79,8 @@ public class Aquarium
      */
     public int getSize()
     {
-        // TODO 1a
-        return -1;
+        // TODO 1a - complete
+        return size;
     }
     
     /**
@@ -59,8 +88,8 @@ public class Aquarium
      */
     public int[] getColumnTotals()
     {
-        // TODO 1b
-        return null;
+        // TODO 1b - complete
+        return columnTotals;
     }
     
     /**
@@ -68,8 +97,8 @@ public class Aquarium
      */
     public int[] getRowTotals()
     {
-        // TODO 1c
-        return null;
+        // TODO 1c - complete
+        return rowTotals;
     }
     
     /**
@@ -77,8 +106,8 @@ public class Aquarium
      */
     public int[][] getAquariums()
     {
-        // TODO 1d
-        return null;
+        // TODO 1d - complete
+        return aquariums;
     }
     
     /**
@@ -86,8 +115,8 @@ public class Aquarium
      */
     public Space[][] getSpaces()
     {
-        // TODO 1e
-        return null;
+        // TODO 1e - complete
+        return spaces;
     }
     
     /**
@@ -96,7 +125,18 @@ public class Aquarium
      */
     public void leftClick(int r, int c)
     {
-        // TODO 4
+        // TODO 4 - complete
+        if (r < size && c < size)
+        {
+            if (spaces[r][c] == Space.WATER)
+            {
+                spaces[r][c] = Space.EMPTY;
+            }
+            else
+            {
+                spaces[r][c] = Space.WATER;
+            }
+        }
     }
     
     /**
@@ -105,7 +145,18 @@ public class Aquarium
      */
     public void rightClick(int r, int c)
     {
-        // TODO 5
+        // TODO 5 - complete
+        if (r < size && c < size)
+        {
+            if (spaces[r][c] == Space.AIR)
+            {
+                spaces[r][c] = Space.EMPTY;
+            }
+            else
+            {
+                spaces[r][c] = Space.AIR;
+            }
+        }
     }
     
     /**
@@ -113,6 +164,13 @@ public class Aquarium
      */
     public void clear()
     {
-        // TODO 6
+        // TODO 6 - complete
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                spaces[x][y] = Space.EMPTY;
+            }
+        }
     }
 }

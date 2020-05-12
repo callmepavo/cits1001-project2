@@ -25,7 +25,16 @@ public class AquariumViewer implements MouseListener
      */
     public AquariumViewer(Aquarium puzzle)
     {
-        // TODO 8
+        // TODO 8 - complete
+        this.puzzle = puzzle;
+        size = puzzle.getSize();
+        
+        WINDOWSIZE = (OFFSET*2) + (BOXSIZE*size);
+        sc = new SimpleCanvas("Aquarium Puzzle - Zach & Oliver", WINDOWSIZE, WINDOWSIZE, Color.white);
+
+        sc.addMouseListener(this);
+        
+        this.displayPuzzle();
     }
     
     /**
@@ -50,8 +59,8 @@ public class AquariumViewer implements MouseListener
      */
     public Aquarium getPuzzle()
     {
-        // TODO 7a
-        return null;
+        // TODO 7a - complete
+        return puzzle;
     }
     
     /**
@@ -59,8 +68,8 @@ public class AquariumViewer implements MouseListener
      */
     public int getSize()
     {
-        // TODO 7b
-        return -1;
+        // TODO 7b - complete
+        return size;
     }
 
     /**
@@ -68,8 +77,8 @@ public class AquariumViewer implements MouseListener
      */
     public SimpleCanvas getCanvas()
     {
-        // TODO 7c
-        return null;
+        // TODO 7c - complete
+        return sc;
     }
     
     /**
@@ -77,7 +86,18 @@ public class AquariumViewer implements MouseListener
      */
     private void displayPuzzle()
     {
-        // TODO 13
+        // TODO 13 - complete
+        Space[][] spaces = puzzle.getSpaces();
+        for (int r = 0; r < spaces.length; r++){
+            for (int c = 0; c < spaces[r].length; c++) {
+                this.updateSquare(r,c);
+            }
+        }
+        
+        this.displayGrid();
+        this.displayButtons();
+        this.displayNumbers();
+        this.displayAquariums();
     }
     
     /**
@@ -85,7 +105,11 @@ public class AquariumViewer implements MouseListener
      */
     public void displayGrid()
     {
-        // TODO 9
+        // TODO 9 - complete
+        for (int s = 0; s < size+1; s++) {
+            sc.drawLine(OFFSET+(BOXSIZE*s), OFFSET, OFFSET+(BOXSIZE*s), OFFSET+(size*BOXSIZE), Color.black);
+            sc.drawLine(OFFSET, OFFSET+(BOXSIZE*s), OFFSET+(size*BOXSIZE), OFFSET+(BOXSIZE*s), Color.black);
+        }
     }
     
     /**
@@ -93,7 +117,17 @@ public class AquariumViewer implements MouseListener
      */
     public void displayNumbers()
     {
-        // TODO 10
+        // TODO 10 - complete
+        sc.setFont(new Font("Consolas",1,20));
+        int[] rowTotals = puzzle.getRowTotals();
+        for (int r = 0; r < rowTotals.length; r++){
+            sc.drawString(String.valueOf(rowTotals[r]), OFFSET-(BOXSIZE/2)-4, OFFSET+(BOXSIZE*r)+(BOXSIZE/2)+8, Color.black);
+        }
+        
+        int[] columnTotals = puzzle.getColumnTotals();
+        for (int c = 0; c < columnTotals.length; c++){
+            sc.drawString(String.valueOf(columnTotals[c]), OFFSET+(BOXSIZE*c)+(BOXSIZE/2)-4, OFFSET-(BOXSIZE/2)+8, Color.black);
+        }
     }
     
     /**
@@ -101,7 +135,31 @@ public class AquariumViewer implements MouseListener
      */
     public void displayAquariums()
     {
-        // TODO 11
+        // TODO 11 - complete
+        int gridSize = BOXSIZE * size;
+        // Draw around entire grid
+        sc.drawRectangle(OFFSET-1, OFFSET-1, OFFSET+gridSize+1, OFFSET+2, Color.RED);//top
+        sc.drawRectangle(OFFSET-1, OFFSET-1, OFFSET+2, OFFSET+gridSize+1, Color.RED);//left
+        sc.drawRectangle(OFFSET-1, OFFSET+gridSize-2, OFFSET+gridSize+1, OFFSET+gridSize+1, Color.RED);//bottom
+        sc.drawRectangle(OFFSET+gridSize-2, OFFSET-1, OFFSET+gridSize+1, OFFSET+gridSize+1, Color.RED);//right
+        
+        int[][] aquariums = puzzle.getAquariums();
+        // Analyse each cell
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                int group = aquariums[x][y];
+                if ( (x+1 < size) && (group != aquariums[x+1][y]) )
+                {
+                    sc.drawRectangle(OFFSET + y*BOXSIZE - 1, OFFSET + (x+1)*BOXSIZE-2, OFFSET + (y+1)*BOXSIZE + 1  , OFFSET + (x+1)*BOXSIZE + 2, Color.RED);
+                }
+                if ( (y+1 < size) && (group != aquariums[x][y+1]) )
+                {
+                    sc.drawRectangle(OFFSET + (y+1)*BOXSIZE - 1, OFFSET + x*BOXSIZE - 1, OFFSET + (y+1)*BOXSIZE+2, OFFSET+(x+1)*BOXSIZE+1, Color.RED);
+                }
+            }
+        }
     }
     
     /**
@@ -109,7 +167,13 @@ public class AquariumViewer implements MouseListener
      */
     public void displayButtons()
     {
-        // TODO 12
+        // TODO 12 - complete
+        sc.setFont(new Font("Consolas",1,20));
+        sc.drawRectangle(0, WINDOWSIZE-BOXSIZE, WINDOWSIZE/2, WINDOWSIZE, Color.green);
+        sc.drawString("CHECK", (WINDOWSIZE/4)-32, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
+        
+        sc.drawRectangle(WINDOWSIZE/2, WINDOWSIZE-BOXSIZE, WINDOWSIZE, WINDOWSIZE, Color.red);
+        sc.drawString("CLEAR", (WINDOWSIZE/4)*3-32, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
     }
     
     /**
@@ -118,7 +182,20 @@ public class AquariumViewer implements MouseListener
      */
     public void updateSquare(int r, int c)
     {
-        // TODO 14
+        // TODO 14 - complete
+        Color material;
+        Space square = puzzle.getSpaces()[r][c];
+        if (square == Space.WATER) {
+            material = Color.blue;
+        } else {
+            material = Color.white;
+        }
+        
+        sc.drawRectangle(OFFSET+(BOXSIZE*c), OFFSET+(BOXSIZE*r), OFFSET+(BOXSIZE*(c+1)), OFFSET+(BOXSIZE*(r+1)), material);
+        if (square == Space.AIR) {
+            sc.drawDisc(OFFSET+(BOXSIZE*c)+(BOXSIZE/2),OFFSET+(BOXSIZE*r)+(BOXSIZE/2), BOXSIZE/4, Color.pink);
+            sc.drawDisc(OFFSET+(BOXSIZE*c)+(BOXSIZE/2),OFFSET+(BOXSIZE*r)+(BOXSIZE/2), BOXSIZE/6, Color.white);
+        }
     }
     
     /**
@@ -129,7 +206,32 @@ public class AquariumViewer implements MouseListener
      */
     public void mousePressed(MouseEvent e) 
     {
-        // TODO 15
+        // TODO 15 - complete
+        int x = e.getX();
+        int y = e.getY();
+        // If true, click was inside the grid
+        if ((OFFSET < x && x < WINDOWSIZE-OFFSET) && (OFFSET < y && y < WINDOWSIZE-OFFSET)) {
+            int c = (x-OFFSET)/BOXSIZE;
+            int r = (y-OFFSET)/BOXSIZE;
+            
+            if (e.getButton() == MouseEvent.BUTTON1) { puzzle.leftClick(r,c); }
+            if (e.getButton() == MouseEvent.BUTTON3) { puzzle.rightClick(r,c); }
+            
+            this.updateSquare(r,c);
+            this.displayGrid();
+            this.displayAquariums();
+        } else if (WINDOWSIZE-OFFSET < y) {
+            // If true check button pressed, else clear button pressed
+            if (x < WINDOWSIZE/2) {
+                sc.setFont(new Font("Consolas",1,20));
+                sc.drawRectangle(0,0,WINDOWSIZE,WINDOWSIZE,Color.white);
+                sc.drawString(CheckSolution.isSolution(puzzle), 32, WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, Color.black);
+                this.displayPuzzle();
+            } else {
+                puzzle.clear();
+                this.displayPuzzle();
+            }
+        }
     }
     public void mouseClicked(MouseEvent e) {}
     public void mouseReleased(MouseEvent e) {}
