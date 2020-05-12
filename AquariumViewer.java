@@ -25,7 +25,7 @@ public class AquariumViewer implements MouseListener
      */
     public AquariumViewer(Aquarium puzzle)
     {
-        // TODO 8
+        // TODO 8 - complete7
         this.puzzle = puzzle;
         size = puzzle.getSize();
         
@@ -86,7 +86,7 @@ public class AquariumViewer implements MouseListener
      */
     private void displayPuzzle()
     {
-        // TODO 13
+        // TODO 13 - complete
         Space[][] spaces = puzzle.getSpaces();
         for (int r = 0; r < spaces.length; r++){
             for (int c = 0; c < spaces[r].length; c++) {
@@ -135,7 +135,7 @@ public class AquariumViewer implements MouseListener
      */
     public void displayAquariums()
     {
-        // TODO 11
+        // TODO 11 - complete
         int gridSize = BOXSIZE * size;
         // Draw around entire grid
         sc.drawRectangle(OFFSET-1, OFFSET-1, OFFSET+gridSize+1, OFFSET+2, Color.RED);//top
