@@ -4,6 +4,9 @@
  *
  * @author Lyndon While
  * @version 2020
+ * 
+ * @author Zach Manson (22903345), Oliver Lynch (22989775)
+ * @version 20200512
  */
 import java.awt.*;
 import java.awt.event.*; 
