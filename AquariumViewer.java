@@ -231,9 +231,9 @@ public class AquariumViewer implements MouseListener
         } else if (WINDOWSIZE-OFFSET < y) {
             // If true check button pressed, else clear button pressed
             if (x < WINDOWSIZE/2) {
-                sc.setFont(new Font("Consolas",1,20));
-                sc.drawRectangle(0,0,WINDOWSIZE,WINDOWSIZE,backColor);
-                sc.drawString(CheckSolution.isSolution(puzzle), 32, WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, foreColor);
+                sc.setFont(new Font("Segoe UI Symbol",1,20));
+                sc.drawRectangle(0,0,WINDOWSIZE,WINDOWSIZE,Color.white);
+                sc.drawString(CheckSolution.isSolution(puzzle), 32, WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, Color.black);
                 this.displayPuzzle();
             } else {
                 puzzle.clear();
