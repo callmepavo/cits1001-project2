@@ -167,7 +167,6 @@ public class CheckSolution
         
         if (!isOK)
         {
-            System.out.println("coords "+coords);
             return coords;
         }
         return "";
@@ -187,20 +186,16 @@ public class CheckSolution
         int[] correctColumnTotals = p.getColumnTotals();
         int[] actualRowTotals = rowCounts(p);
         int[] actualColumnTotals = columnCounts(p);
-        
-        String output = "\u2713\u2713\u2713";
-        
+                
         for (int i = 0; i < p.getSize(); i++)
         {
             if (correctColumnTotals[i] != actualColumnTotals[i])
             {
-                output = "Column " + i + " is wrong";
-                break;//return output; // might change to putting return here later
+                return "Column " + i + " is wrong";
             }
             if (correctRowTotals[i] != actualRowTotals[i])
             {
-                output = "Row " + i + " is wrong";
-                break;//return output; // might change to putting return here later
+                return "Row " + i + " is wrong";
             }
             
         }
@@ -210,26 +205,23 @@ public class CheckSolution
         int highestGroup = 0;
         for (int[] row : aquariums)
         {
-            for (int i : row)
+            for (int cell : row)
             {
-                if (i > highestGroup)
+                if (cell > highestGroup)
                 {
-                    highestGroup = i;
+                    highestGroup = cell;
                 }
             }
         }
         
-        String coords = "";
         for (int t = 0; t < highestGroup; t++)
         {
-            coords = isAquariumOK(p, t);
+            String coords = isAquariumOK(p, t);
             if (!coords.isEmpty())
             {
-
-                output = "The aquarium at " + coords + " is wrong";
+                return "The aquarium at " + coords + " is wrong";
             }
         }
-        System.out.println(output);
-        return output;
+        return "\u2713\u2713\u2713";
     }
 }
