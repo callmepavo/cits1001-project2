@@ -233,8 +233,15 @@ public class AquariumViewer implements MouseListener
             altColor = Color.red;
         }
         darkMode = !darkMode;
-        puzzle.clear();
-        sc.drawRectangle(0,0,WINDOWSIZE,WINDOWSIZE,backColor);
+        sc.drawRectangle(0,0,WINDOWSIZE,WINDOWSIZE,backColor); // redraw background
+        Space[][] spaces = puzzle.getSpaces();
+        for (int c = 0; c < spaces.length; c++)
+        {
+            for (int r = 0; r < spaces[0].length; r++)
+            {
+                updateSquare(c,r);
+            }
+        }
         displayPuzzle();
     }
     
