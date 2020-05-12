@@ -170,10 +170,10 @@ public class AquariumViewer implements MouseListener
         // TODO 12 - complete
         sc.setFont(new Font("Arial",1,20));
         sc.drawRectangle(0, WINDOWSIZE-BOXSIZE, WINDOWSIZE/2, WINDOWSIZE, Color.green);
-        sc.drawString("CHECK", BOXSIZE+30, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
+        sc.drawString("CHECK", (WINDOWSIZE/4)-32, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
         
         sc.drawRectangle(WINDOWSIZE/2, WINDOWSIZE-BOXSIZE, WINDOWSIZE, WINDOWSIZE, Color.red);
-        sc.drawString("CLEAR", BOXSIZE+(WINDOWSIZE/2)+30, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
+        sc.drawString("CLEAR", (WINDOWSIZE/4)*3-32, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
     }
     
     /**
@@ -223,7 +223,10 @@ public class AquariumViewer implements MouseListener
         } else if (WINDOWSIZE-OFFSET < y) {
             // If true check button pressed, else clear button pressed
             if (x < WINDOWSIZE/2) {
-                CheckSolution.isSolution(puzzle);
+                sc.setFont(new Font("Arial",1,20));
+                sc.drawRectangle(0,0,WINDOWSIZE,WINDOWSIZE,Color.white);
+                sc.drawString(CheckSolution.isSolution(puzzle), 32, WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, Color.black);
+                this.displayPuzzle();
             } else {
                 puzzle.clear();
                 this.displayPuzzle();
