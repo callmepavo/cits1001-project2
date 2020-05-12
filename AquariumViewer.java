@@ -11,6 +11,7 @@
 import java.awt.*;
 import java.awt.event.*; 
 import javax.swing.SwingUtilities;
+import java.time.*;
 
 public class AquariumViewer implements MouseListener
 {
@@ -26,6 +27,10 @@ public class AquariumViewer implements MouseListener
     private Color backColor = new Color(20,25,50);
     private Color waterColor = new Color(45,130,200);
     private Color altColor = new Color(180,45,45);
+    
+    private Clock clock = Clock.systemUTC();
+    private Instant startTime;
+    private Duration solveTime; 
 
     /**
      * Main constructor for objects of class AquariumViewer.
@@ -43,6 +48,8 @@ public class AquariumViewer implements MouseListener
         sc.addMouseListener(this);
         
         this.displayPuzzle();
+        
+        startTime = clock.instant();
     }
     
     /**
@@ -231,9 +238,16 @@ public class AquariumViewer implements MouseListener
         } else if (WINDOWSIZE-OFFSET < y) {
             // If true check button pressed, else clear button pressed
             if (x < WINDOWSIZE/2) {
+                String solveText = CheckSolution.isSolution(puzzle);
+                
                 sc.setFont(new Font("Segoe UI Symbol",1,20));
                 sc.drawRectangle(0,0,WINDOWSIZE,WINDOWSIZE,backColor);
-                sc.drawString(CheckSolution.isSolution(puzzle), 32, WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, foreColor);
+                sc.drawString(solveText, 32, WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, foreColor);
+                if (solveText == "\u2713\u2713\u2713") {
+                    solveTime = Duration.between(startTime, clock.instant());
+                    sc.drawString("Solved in "+solveTime.getSeconds()+" seconds.", 32, BOXSIZE/2+8, foreColor);
+                }
+                
                 this.displayPuzzle();
             } else {
                 puzzle.clear();
