@@ -191,10 +191,10 @@ public class AquariumViewer implements MouseListener
             material = Color.white;
         }
         
-        sc.drawRectangle(OFFSET+(BOXSIZE*r), OFFSET+(BOXSIZE*c), OFFSET+(BOXSIZE*(r+1)), OFFSET+(BOXSIZE*(c+1)), material);
+        sc.drawRectangle(OFFSET+(BOXSIZE*c), OFFSET+(BOXSIZE*r), OFFSET+(BOXSIZE*(c+1)), OFFSET+(BOXSIZE*(r+1)), material);
         if (square == Space.AIR) {
-            sc.drawDisc(OFFSET+(BOXSIZE*r)+(BOXSIZE/2),OFFSET+(BOXSIZE*c)+(BOXSIZE/2), BOXSIZE/4, Color.pink);
-            sc.drawDisc(OFFSET+(BOXSIZE*r)+(BOXSIZE/2),OFFSET+(BOXSIZE*c)+(BOXSIZE/2), BOXSIZE/6, Color.white);
+            sc.drawDisc(OFFSET+(BOXSIZE*c)+(BOXSIZE/2),OFFSET+(BOXSIZE*r)+(BOXSIZE/2), BOXSIZE/4, Color.pink);
+            sc.drawDisc(OFFSET+(BOXSIZE*c)+(BOXSIZE/2),OFFSET+(BOXSIZE*r)+(BOXSIZE/2), BOXSIZE/6, Color.white);
         }
     }
     
@@ -211,8 +211,8 @@ public class AquariumViewer implements MouseListener
         int y = e.getY();
         // If true, click was inside the grid
         if ((OFFSET < x && x < WINDOWSIZE-OFFSET) && (OFFSET < y && y < WINDOWSIZE-OFFSET)) {
-            int r = (x-OFFSET)/BOXSIZE;
-            int c = (y-OFFSET)/BOXSIZE;
+            int c = (x-OFFSET)/BOXSIZE;
+            int r = (y-OFFSET)/BOXSIZE;
             
             if (e.getButton() == MouseEvent.BUTTON1) { puzzle.leftClick(r,c); }
             if (e.getButton() == MouseEvent.BUTTON3) { puzzle.rightClick(r,c); }
