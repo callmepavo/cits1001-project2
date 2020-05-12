@@ -9,6 +9,6 @@ A Java program to allow a user to play the game Aquarium
 
 ## Extension ideas:
 + Auto solve
-+ Dark theme :^)
++ ~~Dark theme :^)~~ complete
 + Timer
 + Puzzle generator
