@@ -184,11 +184,15 @@ public class AquariumViewer implements MouseListener
     {
         // TODO 12 - complete
         sc.setFont(new Font("Consolas",1,20));
+        
         sc.drawRectangle(0, WINDOWSIZE-BOXSIZE, WINDOWSIZE/2, WINDOWSIZE, Color.green);
         sc.drawString("CHECK", (WINDOWSIZE/4)-32, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
         
         sc.drawRectangle(WINDOWSIZE/2, WINDOWSIZE-BOXSIZE, WINDOWSIZE, WINDOWSIZE, Color.red);
         sc.drawString("CLEAR", (WINDOWSIZE/4)*3-32, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
+        
+        sc.drawRectangle(0,0,WINDOWSIZE,BOXSIZE,Color.cyan);
+        sc.drawString("TOGGLE DARK MODE", (WINDOWSIZE/4), (BOXSIZE/4)*3-4, Color.black);
     }
     
     /**
@@ -211,6 +215,40 @@ public class AquariumViewer implements MouseListener
             sc.drawDisc(OFFSET+(BOXSIZE*c)+(BOXSIZE/2),OFFSET+(BOXSIZE*r)+(BOXSIZE/2), BOXSIZE/4, altColor);
             sc.drawDisc(OFFSET+(BOXSIZE*c)+(BOXSIZE/2),OFFSET+(BOXSIZE*r)+(BOXSIZE/2), BOXSIZE/6, backColor);
         }
+    }
+    /**
+     * Toggles dark mode on and off.
+     * Updates colors and redraws canvas elements.
+     * Clears puzzle arrangement as to not cause errors.
+     */
+    public void toggleDarkMode()
+    {
+        if (!darkMode)
+        {
+            foreColor = new Color(245,245,245);
+            backColor = new Color(20,25,50);
+            waterColor = new Color(45,130,200);
+            altColor = new Color(180,45,45);
+
+        }
+        else
+        {
+            foreColor = Color.black;
+            backColor = Color.white;
+            waterColor = Color.blue;
+            altColor = Color.red;
+        }
+        darkMode = !darkMode;
+        sc.drawRectangle(0,0,WINDOWSIZE,WINDOWSIZE,backColor); // redraw background
+        Space[][] spaces = puzzle.getSpaces();
+        for (int c = 0; c < spaces.length; c++)
+        {
+            for (int r = 0; r < spaces[0].length; r++)
+            {
+                updateSquare(c,r);
+            }
+        }
+        displayPuzzle();
     }
     
     /**
@@ -235,7 +273,7 @@ public class AquariumViewer implements MouseListener
             this.updateSquare(r,c);
             this.displayGrid();
             this.displayAquariums();
-        } else if (WINDOWSIZE-OFFSET < y) {
+        } else if (WINDOWSIZE-OFFSET/2 < y) {
             // If true check button pressed, else clear button pressed
             if (x < WINDOWSIZE/2) {
                 String solveText = CheckSolution.isSolution(puzzle);
@@ -253,6 +291,8 @@ public class AquariumViewer implements MouseListener
                 puzzle.clear();
                 this.displayPuzzle();
             }
+        } else if (OFFSET/2 > y) {
+            toggleDarkMode();
         }
     }
     public void mouseClicked(MouseEvent e) {}

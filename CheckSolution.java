@@ -75,17 +75,6 @@ public class CheckSolution
         int[][] aquariums = p.getAquariums();
         Space[][] spaces = p.getSpaces();
         
-        /* Horrible ugly debug loop  - can remove later
-         * 
-         * for (int[] i :aquariums)
-            {for (int j: i)
-                System.out.print(j); System.out.println();}
-        for (Space[] s :spaces)
-            {for (Space s2: s)
-                if (s2 == Space.WATER)
-                    System.out.print("W");
-                else
-                    System.out.print("-"); System.out.println();}*/
         int tSpaces = 0;
         int tSpacesWithWater = 0;
         
@@ -94,7 +83,6 @@ public class CheckSolution
         {
             if (aquariums[r][i] == t)
             {
-                //System.out.print("("+r+","+i+")"); debug print
                 status[1] = i;
                 tSpaces++;
                 if (spaces[r][i] == Space.WATER) { tSpacesWithWater++; }
@@ -117,8 +105,6 @@ public class CheckSolution
         {
             status[0] = 3;
         }
-        /* debug prints System.out.println("tSpaces " + tSpaces + " tspaceswithwater "+ tSpacesWithWater);
-        System.out.println("row "+ r +" group " + t+ " status "+status[0]+" " +status[1]);*/
         return status;
     }
     
@@ -204,17 +190,7 @@ public class CheckSolution
         
         // Find highest group number
         int[][] aquariums = p.getAquariums();
-        int highestGroup = 0;
-        for (int[] row : aquariums)
-        {
-            for (int cell : row)
-            {
-                if (cell > highestGroup)
-                {
-                    highestGroup = cell;
-                }
-            }
-        }
+        int highestGroup = aquariums[aquariums.length-1][aquariums[0].length-1];
         
         for (int t = 0; t < highestGroup; t++)
         {
