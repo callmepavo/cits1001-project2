@@ -262,6 +262,18 @@ public class AquariumViewer implements MouseListener
             Color.black);
         
         sc.drawRectangle(
+            WINDOWSIZE-(BOXSIZE*3),
+            0,
+            WINDOWSIZE-BOXSIZE,
+            BOXSIZE,
+            Color.green);
+        sc.drawString(
+            "SOLVE", 
+            WINDOWSIZE-(BOXSIZE*3)+(BOXSIZE/4), 
+            (BOXSIZE/4)*3-4, 
+            Color.black);
+            
+        sc.drawRectangle(
             WINDOWSIZE-BOXSIZE,
             0,
             WINDOWSIZE,
@@ -411,6 +423,9 @@ public class AquariumViewer implements MouseListener
         } else if (OFFSET/2 > y) {
             if (x > WINDOWSIZE-BOXSIZE) {
                 toggleDarkMode();
+            } else if (x < WINDOWSIZE-BOXSIZE && x > WINDOWSIZE-(BOXSIZE*4)) {
+                CheckSolution.solve(puzzle);
+                this.displayPuzzle();
             }
         }
     }
