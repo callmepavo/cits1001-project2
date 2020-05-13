@@ -8,7 +8,6 @@ import java.util.ArrayList;
  * @author Zach Manson (22903345), Oliver Lynch (22989775)
  * @version 20200512
  */
-import java.util.ArrayList;
 public class Aquarium
 {
     private int   size;         // the board is size x size
@@ -193,7 +192,7 @@ public class Aquarium
             }
         }
         
-        return bottom - top;
+        return bottom - top + 1;
     }
     /**
      * Fills the specified aquarium f number of squares deep. 
@@ -207,7 +206,7 @@ public class Aquarium
             for (int j = 0; j < aquariums[i].length; j++) {
                 if (aquariums[i][j] == a) {
                     filling = true; 
-                    if (airLevel >= 0) {
+                    if (airLevel > 0) {
                         spaces[i][j] = Space.AIR;
                     } else {
                         spaces[i][j] = Space.WATER;
@@ -218,5 +217,16 @@ public class Aquarium
                 airLevel--;
             }
         }
+    }
+    public ArrayList<Integer> getAquariumIDs() {
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+        for (int[] row: aquariums) {
+            for (int id: row) {
+                if (!ids.contains(id)){
+                    ids.add(id);
+                }
+            }
+        }
+        return ids;
     }
 }

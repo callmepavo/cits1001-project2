@@ -1,4 +1,5 @@
-
+import java.util.ArrayList;
+import java.util.Arrays; //Testing
 /**
  * CheckSolution is a utility class which can check if
  * a board position in an Aquarium puzzle is a solution.
@@ -9,8 +10,6 @@
  * @author Zach Manson (22903345), Oliver Lynch (22989775)
  * @version 20200512
  */
-import java.util.Arrays; 
-
 public class CheckSolution
 {
     /**
@@ -201,5 +200,61 @@ public class CheckSolution
             }
         }
         return "\u2713\u2713\u2713";
+    }
+    public static int solve(Aquarium p) {
+        ArrayList<Integer> aquariumIDs = p.getAquariumIDs();
+        Integer[][] aquariumData = new Integer[aquariumIDs.size()][3];
+        //int totalOperations = 1;
+        String solveText = "";
+        //AquariumViewer av = new AquariumViewer(p);
+        
+        for (int i = 0; i < aquariumIDs.size(); i++){
+            int aquariumSize = p.getAquariumSize(aquariumIDs.get(i));
+            aquariumData[i] = new Integer[]{aquariumIDs.get(i),aquariumSize,0};
+            //totalOperations *= aquariumSize;
+        }
+        
+        boolean complete = true;
+        while (complete) {
+            for (Integer[] aquarium: aquariumData) {
+                p.fillAquarium(aquarium[0], aquarium[2]);
+            }
+            solveText = CheckSolution.isSolution(p);
+            if (solveText == "\u2713\u2713\u2713") {
+                break;
+            }
+            
+            complete = false;
+            for (Integer[] aquarium: aquariumData) {
+                if (aquarium[1]!=aquarium[2]){
+                    complete = true;
+                }
+            }
+            
+            //System.out.println(solveText);//Arrays.deepToString(aquariumData));
+            // av.displayPuzzle();
+            aquariumData = incrementSolution(aquariumData);
+        }
+        
+        
+        
+        return 1;
+    }
+    private static Integer[][] incrementSolution(Integer[][] aquariumData) {
+        Boolean carry = true;
+        for (int i = 0; i < aquariumData.length; i++) {
+            if (carry) {
+                if (aquariumData[i][2] < aquariumData[i][1]) {
+                    aquariumData[i][2]++;
+                    carry = false;
+                } else {
+                    aquariumData[i][2] = 0;
+                }
+            } else {
+                break;
+            }
+        }
+        
+        return aquariumData;
     }
 }
