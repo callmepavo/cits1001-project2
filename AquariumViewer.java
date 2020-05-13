@@ -192,8 +192,14 @@ public class AquariumViewer implements MouseListener
         sc.drawRectangle(WINDOWSIZE/2, WINDOWSIZE-BOXSIZE, WINDOWSIZE, WINDOWSIZE, Color.red);
         sc.drawString("CLEAR", (WINDOWSIZE/4)*3-32, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
         
-        sc.drawRectangle(0,0,WINDOWSIZE,BOXSIZE,Color.cyan);
-        sc.drawString("TOGGLE DARK MODE", (WINDOWSIZE/4), (BOXSIZE/4)*3-4, Color.black);
+        sc.drawRectangle(WINDOWSIZE-BOXSIZE,0,WINDOWSIZE,BOXSIZE,Color.cyan);
+        
+        sc.setFont(new Font("Segoe UI Symbol",1,20));
+        String themeButton = "\u263E"; //Moon symbol
+        if (darkMode) {
+            themeButton = "\u263C"; //Sun symbol
+        } 
+        sc.drawString(themeButton, WINDOWSIZE-(BOXSIZE/4)*3, (BOXSIZE/4)*3-4, Color.black);
     }
     
     /**
@@ -293,7 +299,9 @@ public class AquariumViewer implements MouseListener
                 this.displayPuzzle();
             }
         } else if (OFFSET/2 > y) {
-            toggleDarkMode();
+            if (x > WINDOWSIZE-BOXSIZE) {
+                toggleDarkMode();
+            }
         }
     }
     public void mouseClicked(MouseEvent e) {}
