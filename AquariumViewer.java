@@ -44,7 +44,9 @@ public class AquariumViewer implements MouseListener
         size = puzzle.getSize();
         
         WINDOWSIZE = (OFFSET*2) + (BOXSIZE*size);
-        sc = new SimpleCanvas("Aquarium Puzzle - Zach & Oliver", WINDOWSIZE, WINDOWSIZE, backColor);
+        sc = new SimpleCanvas(
+            "Aquarium Puzzle - Zach & Oliver", 
+            WINDOWSIZE, WINDOWSIZE, backColor);
 
         sc.addMouseListener(this);
         
@@ -123,8 +125,19 @@ public class AquariumViewer implements MouseListener
     {
         // TODO 9 - complete
         for (int s = 0; s < size+1; s++) {
-            sc.drawLine(OFFSET+(BOXSIZE*s), OFFSET, OFFSET+(BOXSIZE*s), OFFSET+(size*BOXSIZE), foreColor);
-            sc.drawLine(OFFSET, OFFSET+(BOXSIZE*s), OFFSET+(size*BOXSIZE), OFFSET+(BOXSIZE*s), foreColor);
+            sc.drawLine(
+                OFFSET+(BOXSIZE*s),
+                OFFSET,
+                OFFSET+(BOXSIZE*s),
+                OFFSET+(size*BOXSIZE),
+                foreColor);
+
+            sc.drawLine(
+                OFFSET,
+                OFFSET+(BOXSIZE*s),
+                OFFSET+(size*BOXSIZE),
+                OFFSET+(BOXSIZE*s),
+                foreColor);
         }
     }
     
@@ -137,12 +150,20 @@ public class AquariumViewer implements MouseListener
         sc.setFont(new Font("Consolas",1,20));
         int[] rowTotals = puzzle.getRowTotals();
         for (int r = 0; r < rowTotals.length; r++){
-            sc.drawString(String.valueOf(rowTotals[r]), OFFSET-(BOXSIZE/2)-4, OFFSET+(BOXSIZE*r)+(BOXSIZE/2)+8, foreColor);
+            sc.drawString(
+                String.valueOf(rowTotals[r]), 
+                OFFSET-(BOXSIZE/2)-4, 
+                OFFSET+(BOXSIZE*r)+(BOXSIZE/2)+8, 
+                foreColor);
         }
         
         int[] columnTotals = puzzle.getColumnTotals();
         for (int c = 0; c < columnTotals.length; c++){
-            sc.drawString(String.valueOf(columnTotals[c]), OFFSET+(BOXSIZE*c)+(BOXSIZE/2)-4, OFFSET-(BOXSIZE/2)+8, foreColor);
+            sc.drawString(
+                String.valueOf(columnTotals[c]),
+                OFFSET+(BOXSIZE*c)+(BOXSIZE/2)-4,
+                OFFSET-(BOXSIZE/2)+8,
+                foreColor);
         }
     }
     
@@ -154,10 +175,30 @@ public class AquariumViewer implements MouseListener
         // TODO 11 - complete
         int gridSize = BOXSIZE * size;
         // Draw around entire grid
-        sc.drawRectangle(OFFSET-1, OFFSET-1, OFFSET+gridSize+1, OFFSET+2, altColor);//top
-        sc.drawRectangle(OFFSET-1, OFFSET-1, OFFSET+2, OFFSET+gridSize+1, altColor);//left
-        sc.drawRectangle(OFFSET-1, OFFSET+gridSize-2, OFFSET+gridSize+1, OFFSET+gridSize+1, altColor);//bottom
-        sc.drawRectangle(OFFSET+gridSize-2, OFFSET-1, OFFSET+gridSize+1, OFFSET+gridSize+1, altColor);//right
+        sc.drawRectangle(
+            OFFSET-1, 
+            OFFSET-1, 
+            OFFSET+gridSize+1, 
+            OFFSET+2, 
+            altColor);//top
+        sc.drawRectangle(
+            OFFSET-1, 
+            OFFSET-1, 
+            OFFSET+2, 
+            OFFSET+gridSize+1, 
+            altColor);//left
+        sc.drawRectangle(
+            OFFSET-1, 
+            OFFSET+gridSize-2, 
+            OFFSET+gridSize+1, 
+            OFFSET+gridSize+1, 
+            altColor);//bottom
+        sc.drawRectangle(
+            OFFSET+gridSize-2, 
+            OFFSET-1, 
+            OFFSET+gridSize+1, 
+            OFFSET+gridSize+1, 
+            altColor);//right
         
         int[][] aquariums = puzzle.getAquariums();
         // Analyse each cell
@@ -168,11 +209,21 @@ public class AquariumViewer implements MouseListener
                 int group = aquariums[x][y];
                 if ( (x+1 < size) && (group != aquariums[x+1][y]) )
                 {
-                    sc.drawRectangle(OFFSET + y*BOXSIZE - 1, OFFSET + (x+1)*BOXSIZE-2, OFFSET + (y+1)*BOXSIZE + 1  , OFFSET + (x+1)*BOXSIZE + 2, altColor);
+                    sc.drawRectangle(
+                        OFFSET + y*BOXSIZE - 1, 
+                        OFFSET + (x+1)*BOXSIZE-2, 
+                        OFFSET + (y+1)*BOXSIZE + 1, 
+                        OFFSET + (x+1)*BOXSIZE + 2, 
+                        altColor);
                 }
                 if ( (y+1 < size) && (group != aquariums[x][y+1]) )
                 {
-                    sc.drawRectangle(OFFSET + (y+1)*BOXSIZE - 1, OFFSET + x*BOXSIZE - 1, OFFSET + (y+1)*BOXSIZE+2, OFFSET+(x+1)*BOXSIZE+1, altColor);
+                    sc.drawRectangle(
+                        OFFSET + (y+1)*BOXSIZE - 1, 
+                        OFFSET + x*BOXSIZE - 1, 
+                        OFFSET + (y+1)*BOXSIZE+2, 
+                        OFFSET+(x+1)*BOXSIZE+1, 
+                        altColor);
                 }
             }
         }
@@ -186,20 +237,47 @@ public class AquariumViewer implements MouseListener
         // TODO 12 - complete
         sc.setFont(new Font("Consolas",1,20));
         
-        sc.drawRectangle(0, WINDOWSIZE-BOXSIZE, WINDOWSIZE/2, WINDOWSIZE, Color.green);
-        sc.drawString("CHECK", (WINDOWSIZE/4)-32, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
+        sc.drawRectangle(
+            0, 
+            WINDOWSIZE-BOXSIZE, 
+            WINDOWSIZE/2, 
+            WINDOWSIZE, 
+            Color.green);
+        sc.drawString(
+            "CHECK", 
+            (WINDOWSIZE/4)-32, 
+            WINDOWSIZE-(BOXSIZE/2)+8, 
+            Color.black);
         
-        sc.drawRectangle(WINDOWSIZE/2, WINDOWSIZE-BOXSIZE, WINDOWSIZE, WINDOWSIZE, Color.red);
-        sc.drawString("CLEAR", (WINDOWSIZE/4)*3-32, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
+        sc.drawRectangle(
+            WINDOWSIZE/2, 
+            WINDOWSIZE-BOXSIZE, 
+            WINDOWSIZE, 
+            WINDOWSIZE, 
+            Color.red);
+        sc.drawString(
+            "CLEAR", 
+            (WINDOWSIZE/4)*3-32, 
+            WINDOWSIZE-(BOXSIZE/2)+8, 
+            Color.black);
         
-        sc.drawRectangle(WINDOWSIZE-BOXSIZE,0,WINDOWSIZE,BOXSIZE,Color.cyan);
+        sc.drawRectangle(
+            WINDOWSIZE-BOXSIZE,
+            0,
+            WINDOWSIZE,
+            BOXSIZE,
+            Color.cyan);
         
         sc.setFont(new Font("Segoe UI Symbol",1,20));
         String themeButton = "\u263E"; //Moon symbol
         if (darkMode) {
             themeButton = "\u263C"; //Sun symbol
         } 
-        sc.drawString(themeButton, WINDOWSIZE-(BOXSIZE/4)*3, (BOXSIZE/4)*3-4, Color.black);
+        sc.drawString(
+            themeButton, 
+            WINDOWSIZE-(BOXSIZE/4)*3, 
+            (BOXSIZE/4)*3-4, 
+            Color.black);
     }
     
     /**
@@ -217,10 +295,23 @@ public class AquariumViewer implements MouseListener
             material = backColor;
         }
         
-        sc.drawRectangle(OFFSET+(BOXSIZE*c), OFFSET+(BOXSIZE*r), OFFSET+(BOXSIZE*(c+1)), OFFSET+(BOXSIZE*(r+1)), material);
+        sc.drawRectangle(
+            OFFSET+(BOXSIZE*c), 
+            OFFSET+(BOXSIZE*r), 
+            OFFSET+(BOXSIZE*(c+1)), 
+            OFFSET+(BOXSIZE*(r+1)), 
+            material);
         if (square == Space.AIR) {
-            sc.drawDisc(OFFSET+(BOXSIZE*c)+(BOXSIZE/2),OFFSET+(BOXSIZE*r)+(BOXSIZE/2), BOXSIZE/4, altColor);
-            sc.drawDisc(OFFSET+(BOXSIZE*c)+(BOXSIZE/2),OFFSET+(BOXSIZE*r)+(BOXSIZE/2), BOXSIZE/6, backColor);
+            sc.drawDisc(
+                OFFSET+(BOXSIZE*c)+(BOXSIZE/2),
+                OFFSET+(BOXSIZE*r)+(BOXSIZE/2), 
+                BOXSIZE/4, 
+                altColor);
+            sc.drawDisc(
+                OFFSET+(BOXSIZE*c)+(BOXSIZE/2),
+                OFFSET+(BOXSIZE*r)+(BOXSIZE/2), 
+                BOXSIZE/6, 
+                backColor);
         }
     }
     /**
@@ -246,7 +337,12 @@ public class AquariumViewer implements MouseListener
             altColor = Color.red;
         }
         darkMode = !darkMode;
-        sc.drawRectangle(0,0,WINDOWSIZE,WINDOWSIZE,backColor); // redraw background
+        sc.drawRectangle(
+            0,
+            0,
+            WINDOWSIZE,
+            WINDOWSIZE,
+            backColor); // redraw background
         Space[][] spaces = puzzle.getSpaces();
         for (int c = 0; c < spaces.length; c++)
         {
@@ -270,12 +366,13 @@ public class AquariumViewer implements MouseListener
         int x = e.getX();
         int y = e.getY();
         // If true, click was inside the grid
-        if ((OFFSET < x && x < WINDOWSIZE-OFFSET) && (OFFSET < y && y < WINDOWSIZE-OFFSET)) {
+        if ((OFFSET < x && x < WINDOWSIZE-OFFSET) 
+        && (OFFSET < y && y < WINDOWSIZE-OFFSET)) {
             int c = (x-OFFSET)/BOXSIZE;
             int r = (y-OFFSET)/BOXSIZE;
             
-            if (e.getButton() == MouseEvent.BUTTON1) { puzzle.leftClick(r,c); }
-            if (e.getButton() == MouseEvent.BUTTON3) { puzzle.rightClick(r,c); }
+            if (e.getButton() == MouseEvent.BUTTON1) {puzzle.leftClick(r,c);}
+            if (e.getButton() == MouseEvent.BUTTON3) {puzzle.rightClick(r,c);}
             
             this.updateSquare(r,c);
             this.displayGrid();
@@ -286,11 +383,24 @@ public class AquariumViewer implements MouseListener
                 String solveText = CheckSolution.isSolution(puzzle);
                 
                 sc.setFont(new Font("Segoe UI Symbol",1,20));
-                sc.drawRectangle(0,0,WINDOWSIZE,WINDOWSIZE,backColor);
-                sc.drawString(solveText, 32, WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, foreColor);
+                sc.drawRectangle(
+                    0,
+                    0,
+                    WINDOWSIZE,
+                    WINDOWSIZE,
+                    backColor);
+                sc.drawString(
+                    solveText, 
+                    32, 
+                    WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, 
+                    foreColor);
                 if (solveText == "\u2713\u2713\u2713") {
                     solveTime = Duration.between(startTime, clock.instant());
-                    sc.drawString("Solved in "+solveTime.getSeconds()+" seconds.", 32, BOXSIZE/2+8, foreColor);
+                    sc.drawString(
+                        "Solved in "+solveTime.getSeconds()+" seconds.", 
+                        32, 
+                        BOXSIZE/2+8, 
+                        foreColor);
                 }
                 
                 this.displayPuzzle();
