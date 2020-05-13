@@ -6,7 +6,7 @@ A Java program to allow a user to play the game Aquarium
 + find out what we have to do in the way of error checking
 + ~Fix the tick font issue~ complete
 + Make program conform to clarity guidelines (e.g. 80 char line max)
-+ Add explaining comments or complicated logic
++ Add explaining comments for complicated logic
 
 
 ## Extension ideas:
