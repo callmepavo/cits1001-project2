@@ -177,6 +177,9 @@ public class Aquarium
         }
     }
     
+    /**
+     * Returns the vertical height of the specified aquarium. 
+     */
     public int getAquariumSize(int a) {
         int top = -1;
         int bottom = -1;
@@ -192,7 +195,9 @@ public class Aquarium
         
         return bottom - top;
     }
-    
+    /**
+     * Fills the specified aquarium f number of squares deep. 
+     */
     public void fillAquarium(int a, int f) {
         int aquariumSize = getAquariumSize(a);
         int airLevel = aquariumSize - f;
