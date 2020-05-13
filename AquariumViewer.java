@@ -393,9 +393,9 @@ public class AquariumViewer implements MouseListener
             this.updateSquare(r,c);
             this.displayGrid();
             this.displayAquariums();
-        } else if (WINDOWSIZE-OFFSET/2 < y) {
+        } else if (WINDOWSIZE-OFFSET/2 < y) { // bottom buttons
             // If true check button pressed, else clear button pressed
-            if (x < WINDOWSIZE/2) {
+            if (x < WINDOWSIZE/2) { // left button
                 String solveText = CheckSolution.isSolution(puzzle);
                 
                 sc.setFont(new Font("Segoe UI Symbol",1,20));
@@ -410,17 +410,18 @@ public class AquariumViewer implements MouseListener
                     32, 
                     WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, 
                     foreColor);
-                if (solveText == "\u2713\u2713\u2713") {
+                if (solveText == "\u2713\u2713\u2713") { // if correct
                     solveTime = Duration.between(startTime, clock.instant());
                     sc.drawString(
-                        "Solved in "+solveTime.getSeconds()+" seconds.", 
+                        "Solved in " + solveTime.getSeconds() + " seconds.", 
                         32, 
                         BOXSIZE/2+8, 
                         foreColor);
+                    startTime = clock.instant();
                 }
                 
                 this.displayPuzzle();
-            } else {
+            } else { // if right button
                 puzzle.clear();
                 sc.drawRectangle(
                     0,
@@ -429,9 +430,10 @@ public class AquariumViewer implements MouseListener
                     WINDOWSIZE,
                     backColor);
                 this.displayPuzzle();
+                startTime = clock.instant();
             }
-        } else if (OFFSET/2 > y) {
-            if (x > WINDOWSIZE-BOXSIZE) {
+        } else if (OFFSET/2 > y) { // top buttons
+            if (x > WINDOWSIZE-BOXSIZE) { // dark mode toggle
                 toggleDarkMode();
             } else if (x < WINDOWSIZE-BOXSIZE && x > WINDOWSIZE-(BOXSIZE*4)) {
                 if (puzzle.getSize() < solvePuzzleSize) {
