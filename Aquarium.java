@@ -176,4 +176,42 @@ public class Aquarium
             }
         }
     }
+    
+    public int getAquariumSize(int a) {
+        int top = -1;
+        int bottom = -1;
+        
+        for (int i = 0; i < aquariums.length; i++) {
+            for (int aquarium : aquariums[i]) {
+                if (aquarium == a) {
+                    if (top == -1) {top = i;}
+                    bottom = i;
+                }
+            }
+        }
+        
+        return bottom - top;
+    }
+    
+    public void fillAquarium(int a, int f) {
+        int aquariumSize = getAquariumSize(a);
+        int airLevel = aquariumSize - f;
+        boolean filling = false;
+        
+        for (int i = 0; i < aquariums.length; i++) {
+            for (int j = 0; j < aquariums[i].length; j++) {
+                if (aquariums[i][j] == a) {
+                    filling = true; 
+                    if (airLevel >= 0) {
+                        spaces[i][j] = Space.AIR;
+                    } else {
+                        spaces[i][j] = Space.WATER;
+                    }
+                }
+            }
+            if (filling) {
+                airLevel--;
+            }
+        }
+    }
 }
