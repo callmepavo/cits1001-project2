@@ -32,6 +32,8 @@ public class AquariumViewer implements MouseListener
     private Clock clock = Clock.systemUTC();
     private Instant startTime;
     private Duration solveTime; 
+    
+    private int solvePuzzleSize = 8;
 
     /**
      * Main constructor for objects of class AquariumViewer.
@@ -261,17 +263,19 @@ public class AquariumViewer implements MouseListener
             WINDOWSIZE-(BOXSIZE/2)+8, 
             Color.black);
         
-        sc.drawRectangle(
-            WINDOWSIZE-(BOXSIZE*3),
-            0,
-            WINDOWSIZE-BOXSIZE,
-            BOXSIZE,
-            Color.green);
-        sc.drawString(
-            "SOLVE", 
-            WINDOWSIZE-(BOXSIZE*3)+(BOXSIZE/4), 
-            (BOXSIZE/4)*3-4, 
-            Color.black);
+        if (puzzle.getSize() < solvePuzzleSize) {
+            sc.drawRectangle(
+                WINDOWSIZE-(BOXSIZE*3),
+                0,
+                WINDOWSIZE-BOXSIZE,
+                BOXSIZE,
+                Color.green);
+            sc.drawString(
+                "SOLVE", 
+                WINDOWSIZE-(BOXSIZE*3)+(BOXSIZE/4), 
+                (BOXSIZE/4)*3-4, 
+                Color.black);
+        }
             
         sc.drawRectangle(
             WINDOWSIZE-BOXSIZE,
@@ -418,14 +422,22 @@ public class AquariumViewer implements MouseListener
                 this.displayPuzzle();
             } else {
                 puzzle.clear();
+                sc.drawRectangle(
+                    0,
+                    0,
+                    WINDOWSIZE,
+                    WINDOWSIZE,
+                    backColor);
                 this.displayPuzzle();
             }
         } else if (OFFSET/2 > y) {
             if (x > WINDOWSIZE-BOXSIZE) {
                 toggleDarkMode();
             } else if (x < WINDOWSIZE-BOXSIZE && x > WINDOWSIZE-(BOXSIZE*4)) {
-                CheckSolution.solve(puzzle);
-                this.displayPuzzle();
+                if (puzzle.getSize() < solvePuzzleSize) {
+                    CheckSolution.solve(puzzle);
+                    this.displayPuzzle();
+                }
             }
         }
     }
