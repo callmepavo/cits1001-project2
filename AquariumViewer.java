@@ -23,10 +23,11 @@ public class AquariumViewer implements MouseListener
     private int        size; // the puzzle is size x size
     private SimpleCanvas sc; // the display window
     
-    private Color foreColor = new Color(245,245,245);
-    private Color backColor = new Color(20,25,50);
-    private Color waterColor = new Color(45,130,200);
-    private Color altColor = new Color(180,45,45);
+    private Color foreColor = Color.black;
+    private Color backColor = Color.white;
+    private Color waterColor = Color.blue;
+    private Color altColor = Color.red;
+    private boolean darkMode = false;
     
     private Clock clock = Clock.systemUTC();
     private Instant startTime;
