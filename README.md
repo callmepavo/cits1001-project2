@@ -13,7 +13,7 @@ A Java program to allow a user to play the game Aquarium
 	+ Select appropriate programming constructs for the method implementations.
 	+ Keep code as simple as possible for the job it is required to do.
 	+ If the logic you have used in a method is particularly complex, a brief comment should be added explaining the strategy you have adopted; but otherwise, code should not be commented unnecessarily.
-
++ Replace some of the magic numbers in the display code
 
 ## Extension ideas:
 + Auto solve
