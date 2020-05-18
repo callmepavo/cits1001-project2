@@ -77,12 +77,13 @@ public class CheckSolution
         int tSpaces = 0;
         int tSpacesWithWater = 0;
         
-        status[0] = 0;
+        status[0] = 0; // Set default value for status[0]
+        // iterate through columns
         for (int i = 0; i < aquariums[r].length; i++)
         {
             if (aquariums[r][i] == t)
             {
-                status[1] = i;
+                status[1] = i; // Sets status[1] to a row number
                 tSpaces++;
                 if (spaces[r][i] == Space.WATER) { tSpacesWithWater++; }
             }
@@ -127,18 +128,7 @@ public class CheckSolution
             rowInfo = rowStatus(p, t, i);
             coords = i + "," + rowInfo[1];
             
-            if (rowInfo[0] == -1) // if theres no tSpaces on this row
-            {
-                if (waterBegun)
-                {
-                    isOK = true;
-                }
-            }
-            else if (rowInfo[0] == 1) // if all tSpaces are water
-            {
-                waterBegun = true;
-            }
-            else if (rowInfo[0] == 2) // if all tSpaces are air
+            if (rowInfo[0] == -1) // iff theres no tSpaces on this row
             {
                 if (waterBegun)
                 {
@@ -146,7 +136,19 @@ public class CheckSolution
                     break;
                 }
             }
-            else if (rowInfo[0] == 3)
+            else if (rowInfo[0] == 1) // iff all tSpaces are water
+            {
+                waterBegun = true;
+            }
+            else if (rowInfo[0] == 2) // iff all tSpaces are air
+            {
+                if (waterBegun)
+                {
+                    isOK = false;
+                    break;
+                }
+            }
+            else if (rowInfo[0] == 3) // iff there's a mix
             {
                 isOK = false;
                 break;
