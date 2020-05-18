@@ -214,7 +214,7 @@ public class CheckSolution
         for (int i = 0; i < aquariumIDs.size(); i++){
             //aquariumData[i] = new Integer[]{aquariumIDs.get(i),aquariumSize,0};
             aquariumData[i][0] = aquariumIDs.get(i);
-            aquariumData[i][1] = p.getAquariumSize(aquariumIDs.get(i));
+            aquariumData[i][1] = p.getAquariumSize(aquariumIDs.get(i).intValue());
             aquariumData[i][2] = 0;
 
             //totalOperations *= aquariumSize;
@@ -239,7 +239,8 @@ public class CheckSolution
             
             //System.out.println(solveText);//Arrays.deepToString(aquariumData));
             // av.displayPuzzle();
-            aquariumData = incrementSolution(aquariumData);
+            //aquariumData = incrementSolution(aquariumData);
+            incrementSolution(aquariumData);
         }
         
         
@@ -247,7 +248,7 @@ public class CheckSolution
         return 1;
     }
     
-    private static Integer[][] incrementSolution(Integer[][] aquariumData) {
+    private static void incrementSolution(Integer[][] aquariumData) {
         boolean carry = true;
         for (int i = 0; i < aquariumData.length; i++) {
             if (carry) {
@@ -262,6 +263,6 @@ public class CheckSolution
             }
         }
         
-        return aquariumData;
+        //return aquariumData;
     }
 }
