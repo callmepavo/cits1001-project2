@@ -149,7 +149,7 @@ public class AquariumViewer implements MouseListener
     public void displayNumbers()
     {
         // TODO 10 - complete
-        sc.setFont(new Font("Consolas",1,20));
+        sc.setFont(new Font("Consolas", 1, 20));
         int[] rowTotals = puzzle.getRowTotals();
         for (int r = 0; r < rowTotals.length; r++){
             sc.drawString(
@@ -176,7 +176,7 @@ public class AquariumViewer implements MouseListener
     {
         // TODO 11 - complete
         int gridSize = BOXSIZE * size;
-        // Draw around entire grid
+        // Draw around entire grid, lines are 3 pixels wide
         sc.drawRectangle(
             OFFSET-1, 
             OFFSET-1, 
@@ -203,14 +203,14 @@ public class AquariumViewer implements MouseListener
             altColor);//right
         
         int[][] aquariums = puzzle.getAquariums();
-        // Analyse each cell
+        // Draw red line on bottom or right depending on group 
         for (int x = 0; x < size; x++)
         {
             for (int y = 0; y < size; y++)
             {
                 int group = aquariums[x][y];
                 if ( (x+1 < size) && (group != aquariums[x+1][y]) )
-                {
+                {   // Draw right border
                     sc.drawRectangle(
                         OFFSET + y*BOXSIZE - 1, 
                         OFFSET + (x+1)*BOXSIZE-2, 
@@ -219,7 +219,7 @@ public class AquariumViewer implements MouseListener
                         altColor);
                 }
                 if ( (y+1 < size) && (group != aquariums[x][y+1]) )
-                {
+                {   // Draw bottom border
                     sc.drawRectangle(
                         OFFSET + (y+1)*BOXSIZE - 1, 
                         OFFSET + x*BOXSIZE - 1, 
@@ -276,7 +276,8 @@ public class AquariumViewer implements MouseListener
                 (BOXSIZE/4)*3-4, 
                 Color.black);
         }
-            
+        
+        // Draw dark mode toggle
         sc.drawRectangle(
             WINDOWSIZE-BOXSIZE,
             0,
@@ -399,6 +400,7 @@ public class AquariumViewer implements MouseListener
                 String solveText = CheckSolution.isSolution(puzzle);
                 
                 sc.setFont(new Font("Segoe UI Symbol",1,20));
+                // Redraw background
                 sc.drawRectangle(
                     0,
                     0,
@@ -419,7 +421,7 @@ public class AquariumViewer implements MouseListener
                         foreColor);
                     startTime = clock.instant();
                 }
-                
+                // Redraw other elements
                 this.displayPuzzle();
             } else { // if right button
                 puzzle.clear();
