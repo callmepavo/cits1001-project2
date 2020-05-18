@@ -203,6 +203,7 @@ public class CheckSolution
         }
         return "\u2713\u2713\u2713";
     }
+    
     public static int solve(Aquarium p) {
         ArrayList<Integer> aquariumIDs = p.getAquariumIDs();
         Integer[][] aquariumData = new Integer[aquariumIDs.size()][3];
@@ -211,8 +212,11 @@ public class CheckSolution
         //AquariumViewer av = new AquariumViewer(p);
         
         for (int i = 0; i < aquariumIDs.size(); i++){
-            int aquariumSize = p.getAquariumSize(aquariumIDs.get(i));
-            aquariumData[i] = new Integer[]{aquariumIDs.get(i),aquariumSize,0};
+            //aquariumData[i] = new Integer[]{aquariumIDs.get(i),aquariumSize,0};
+            aquariumData[i][0] = aquariumIDs.get(i);
+            aquariumData[i][1] = p.getAquariumSize(aquariumIDs.get(i));
+            aquariumData[i][2] = 0;
+
             //totalOperations *= aquariumSize;
         }
         
@@ -221,7 +225,7 @@ public class CheckSolution
             for (Integer[] aquarium: aquariumData) {
                 p.fillAquarium(aquarium[0], aquarium[2]);
             }
-            solveText = CheckSolution.isSolution(p);
+            solveText = isSolution(p);
             if (solveText == "\u2713\u2713\u2713") {
                 break;
             }
@@ -242,8 +246,9 @@ public class CheckSolution
         
         return 1;
     }
+    
     private static Integer[][] incrementSolution(Integer[][] aquariumData) {
-        Boolean carry = true;
+        boolean carry = true;
         for (int i = 0; i < aquariumData.length; i++) {
             if (carry) {
                 if (aquariumData[i][2] < aquariumData[i][1]) {
