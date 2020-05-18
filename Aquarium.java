@@ -176,10 +176,190 @@ public class Aquarium
         }
     }
     
+    
+    
+    
+    // FOR AUTOSOLVE
+    public int getCurrentRowWaterAmount(int r)
+    {
+        int currentRowAmount = 0;
+        for (int c = 0; c < size; c++)
+        {
+            if (spaces[r][c] == Space.WATER)
+            {
+                currentRowAmount++;
+            }
+        }
+        return currentRowAmount;
+    }
+    
+    public int getCurrentRowAirAmount(int r)
+    {
+        int currentRowAmount = 0;
+        for (int c = 0; c < size; c++)
+        {
+            if (spaces[r][c] == Space.AIR)
+            {
+                currentRowAmount++;
+            }
+        }
+        return currentRowAmount;
+    }
+    
+    public int getCurrentColumnnAmount(int c)
+    {
+        int currentColumnAmount = 0;
+        for (int r = 0; r < size; r++)
+        {
+            if (spaces[r][c] == Space.WATER)
+            {
+                currentColumnAmount++;
+            }
+        }
+        return currentColumnAmount;
+    }
+    
+    /** Returns the most extreme rows and columns a group exists in
+     * [0] = top row
+     * [1] = bottom row
+     * [2] = leftmost column
+     * [3] = rightmost column
+    */
+    public int[] getAquariumEdges(int group)
+    {
+        int[] edges = new int[4];
+        edges[0] = size-1;
+        edges[1] = 0;
+        edges[2] = size-1;
+        edges[3] = 0;
+        for (int r = 0; r < size; r++)
+        {
+            for (int c = 0; c < size; c++)
+            {
+                if (aquariums[r][c] == group)
+                {
+                    if (r < edges[0]) {edges[0] = r;}
+                    if (r > edges[1]) {edges[1] = r;}
+                    if (c < edges[2]) {edges[2] = c;}
+                    if (c > edges[3]) {edges[3] = c;}
+                }
+            }
+        }
+        return edges;
+    }
+
     /**
+     * Gets aquarium group's width on row r
+     */
+    public int getAquariumRowWidth(int group, int r)
+    {
+        int width = 0;
+        for (int c = 0; c < size; c++)
+        {
+            if (aquariums[r][c] == group) {width++;}
+        }
+        return width;
+    }
+    
+    /**
+     * Gets aquarium group's width on column c
+     */
+    public int getAquariumColumnHeight(int group, int c)
+    {
+        int height = 0;
+        for (int r = 0; r < size; r++)
+        {
+            if (aquariums[r][c] == group) {height++;}
+        }
+        return height;
+    }
+    
+    public int findAquariumRowLegality(int group, int rowWithinGroup)
+    {
+        // Find row of first group appearance
+        int firstAppearance = 0;
+        outerLoop: for (int r = 0; r < size; r++)
+        {
+            for (int c = 0; c < size; c++)
+            {
+                if (aquariums[r][c] == group)
+                {
+                    firstAppearance = r;
+                    break outerLoop;
+                }
+            }
+        }
+        
+        int row = firstAppearance + rowWithinGroup;
+        // iff groupRow + existing water is more than this line can handle
+        if (  getAquariumRowWidth(group, row)
+            + getCurrentRowWaterAmount(row)
+            
+            > rowTotals[row]  ) 
+        {
+            return -1;//illegal
+        }
+        else if (  size
+                 - getCurrentRowWaterAmount(row)
+                 - getCurrentRowAirAmount(row)
+                 - getAquariumRowWidth(group, row)  
+                 < rowTotals[row] - getCurrentRowWaterAmount(row)  ) 
+        {   // iff row is impossible without this groupRow
+            System.out.println("group" +group);
+            System.out.println("rowWithinGroup"+rowWithinGroup);
+            System.out.println("firstappearance "+firstAppearance);
+            System.out.println("row"+ rowWithinGroup);
+            System.out.println(size +"-"+ getCurrentRowWaterAmount(row)+"-"+getCurrentRowAirAmount(row)+"-"+getAquariumRowWidth(group, row)  +" < "+rowTotals[row]+"-"+ getCurrentRowWaterAmount(row));
+            return 1;//required
+        }
+        
+        return 0;//legal
+    }
+
+    public int findAquariumColumnLegality(int group, int columnWithinGroup)
+    {return 0;}
+    
+    /**
+     * Increases water level in a given group by one
+     * returns true if sucessful, false if not
+     */
+    public void setAquariumWaterLevel(int group, int level)
+    {
+        
+        for (int row = getAquariumEdges(group)[1]; row >= level+getAquariumEdges(group)[0]; row--)
+        {
+            System.out.println(row);
+            for (int c = 0; c < size; c++)
+            {
+                if (aquariums[row][c] == group)
+                {
+                    spaces[row][c] = Space.WATER;
+                }
+            }
+        }
+    }
+    
+    public void setAquariumAirLevel(int group, int level)
+    {
+        
+        for (int row = getAquariumEdges(group)[0]; row <= level; row++)
+        {
+            System.out.println(row);
+            for (int c = 0; c < size; c++)
+            {
+                if (aquariums[row][c] == group)
+                {
+                    spaces[row][c] = Space.AIR;
+                }
+            }
+        }
+    }
+    
+    /*
+    /*
      * Added for project extension: auto-solver
      * Returns the vertical height of the specified aquarium. 
-     */
+     * /
     public int getAquariumSize(int a) {
         int top = -1;
         int bottom = -1;
@@ -196,10 +376,10 @@ public class Aquarium
         return bottom - top + 1;
     }
     
-    /**
+    /*
      * Added for project extension: auto-solver
      * Fills the specified aquarium f number of squares deep. 
-     */
+     * /
     public void fillAquarium(int a, int f) {
         int aquariumSize = getAquariumSize(a);
         int airLevel = aquariumSize - f;
@@ -232,5 +412,7 @@ public class Aquarium
             }
         }
         return ids;
-    }
+    }*/
+    
+    
 }

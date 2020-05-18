@@ -203,7 +203,7 @@ public class CheckSolution
         }
         return "\u2713\u2713\u2713";
     }
-    
+    /*
     public static int solve(Aquarium p) {
         ArrayList<Integer> aquariumIDs = p.getAquariumIDs();
         Integer[][] aquariumData = new Integer[aquariumIDs.size()][3];
@@ -264,5 +264,79 @@ public class CheckSolution
         }
         
         //return aquariumData;
+    }*/
+    public static void solve(Aquarium p)
+    {
+        int size = p.getSize();
+        // Get highest group num from last cell
+        int groupCount = p.getAquariums()[size-1][size-1];
+        // groupRowStatus[group num][row number within group][legality status]
+        // legality status: 0 = unknown, -1 = set to air, 1 = set to water, -2/2 = complete
+        int[][] groupRowStatus = new int[groupCount][];
+        int[][] groupColumnLegal = new int[groupCount][];// will get to this
+        
+        // Fills all the row arrays with correct sizes and sets all statuses
+        for (int group = 0; group < groupCount; group++)
+        {
+            int height = p.getAquariumEdges(group+1)[1] - p.getAquariumEdges(group+1)[0] + 1;
+            groupRowStatus[group] = new int[height];
+            for (int groupRow = 0; groupRow < height; groupRow++)
+            {   // Initialises all groupRow statuses
+                groupRowStatus[group][groupRow] = 0;
+                System.out.println("initialised groupRowStatus:  "+(group+1)+", "+groupRow+" = "+groupRowStatus[group][groupRow]);
+            }
+        }
+        
+
+        
+        int updates = 2;
+        for (int i = 0; i < updates; i++)
+        {
+            System.out.println("-------------------------------------------------------");
+            updateGroupRowStatuses(p, groupRowStatus);
+            updateAquariumLevels(p, groupRowStatus);
+        }
+    }
+    
+    public static void updateGroupRowStatuses(Aquarium p, int[][] groupRowStatus)
+    {
+        // TODO THIS NEEDS TO UPDATE WATER ROWS BELOW AND AIR ROWS ABOVE SO THEIR STATUSES MATCH
+        int groupCount = groupRowStatus.length;
+        for (int group = 0; group < groupCount; group++)
+        {
+            for (int groupRow = 0; groupRow < groupRowStatus[group].length; groupRow++)
+            {   // update neutral statuses
+                if (groupRowStatus[group][groupRow] == 0)
+                {
+                    groupRowStatus[group][groupRow] = p.findAquariumRowLegality(group+1, groupRow);
+                    System.out.println("status group, grouprow, legal? "+(group+1)+" "+groupRow+" "+groupRowStatus[group][groupRow]);
+                    // UPDATE ABOVE AND BELOW GOES HERE
+                }
+            }
+        }  
+    }
+    
+    public static void updateAquariumLevels(Aquarium p, int[][] groupRowStatus)
+    {
+        int groupCount = groupRowStatus.length;
+        for (int group = 0; group < groupCount; group++)
+        {
+           for (int groupRow = 0; groupRow < groupRowStatus[group].length; groupRow++)
+           {
+               if (groupRowStatus[group][groupRow] == 1) // if row is required
+               {
+                   System.out.println("setting water group, grouprow, value "+(group+1)+","+groupRow +","+ groupRowStatus[group][groupRow]);
+                   p.setAquariumWaterLevel(group+1,groupRow);
+                   groupRowStatus[group][groupRow] = 2;
+                   
+                }
+               if (groupRowStatus[group][groupRow] == -1) // if row is illegal mark as air
+               {                    
+                   System.out.println("setting air group, grouprow, value "+(group+1)+","+groupRow +","+ groupRowStatus[group][groupRow]);
+                   p.setAquariumAirLevel(group+1, groupRow);
+                   groupRowStatus[group][groupRow] = -2;
+               }
+            }
+        }
     }
 }

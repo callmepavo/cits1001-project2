@@ -263,7 +263,7 @@ public class AquariumViewer implements MouseListener
             WINDOWSIZE-(BOXSIZE/2)+8, 
             Color.black);
         
-        if (puzzle.getSize() < solvePuzzleSize) {
+        //if (puzzle.getSize() < solvePuzzleSize) {
             sc.drawRectangle(
                 WINDOWSIZE-(BOXSIZE*3),
                 0,
@@ -275,7 +275,7 @@ public class AquariumViewer implements MouseListener
                 WINDOWSIZE-(BOXSIZE*3)+(BOXSIZE/4), 
                 (BOXSIZE/4)*3-4, 
                 Color.black);
-        }
+        //}
         
         // Draw dark mode toggle
         sc.drawRectangle(
@@ -412,7 +412,7 @@ public class AquariumViewer implements MouseListener
                     32, 
                     WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, 
                     foreColor);
-                if (solveText == "\u2713\u2713\u2713") { // if correct
+                if (solveText.equals("\u2713\u2713\u2713")) { // if correct
                     solveTime = Duration.between(startTime, clock.instant());
                     sc.drawString(
                         "Solved in " + solveTime.getSeconds() + " seconds.", 
@@ -437,11 +437,10 @@ public class AquariumViewer implements MouseListener
         } else if (OFFSET/2 > y) { // top buttons
             if (x > WINDOWSIZE-BOXSIZE) { // dark mode toggle
                 toggleDarkMode();
-            } else if (x < WINDOWSIZE-BOXSIZE && x > WINDOWSIZE-(BOXSIZE*4)) {
-                if (puzzle.getSize() < solvePuzzleSize) {
-                    CheckSolution.solve(puzzle);
-                    this.displayPuzzle();
-                }
+            } else if (x < WINDOWSIZE-BOXSIZE && x > WINDOWSIZE-(BOXSIZE*4)) {//if solve
+                puzzle.clear();
+                CheckSolution.solve(puzzle);
+                this.displayPuzzle();
             }
         }
     }
