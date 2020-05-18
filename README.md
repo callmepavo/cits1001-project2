@@ -3,7 +3,7 @@ A Java program to allow a user to play the game Aquarium
 + Submission deadline: 5pm Friday 29 May 2020
 + Submit via [cssubmit](https://secure.csse.uwa.edu.au/run/cssubmit)
 + Value: 25% of CITS1001
-## Other Todos:
+## Todos:
 + ~~Add our names and student IDs to each file~~
 + find out what we have to do in the way of error checking
 + ~~Fix the tick font issue~~ complete
@@ -16,6 +16,7 @@ A Java program to allow a user to play the game Aquarium
 	+ Keep code as simple as possible for the job it is required to do.
 	+ If the logic you have used in a method is particularly complex, a brief comment should be added explaining the strategy you have adopted; but otherwise, code should not be commented unnecessarily.
 + Replace some of the magic numbers in the display code
++ Write out extension explanation to email to Lyndon
 
 ## Extension ideas:
 + Auto solve
