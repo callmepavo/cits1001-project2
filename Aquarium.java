@@ -177,6 +177,7 @@ public class Aquarium
     }
     
     /**
+     * Added for project extension: auto-solver
      * Returns the vertical height of the specified aquarium. 
      */
     public int getAquariumSize(int a) {
@@ -194,7 +195,9 @@ public class Aquarium
         
         return bottom - top + 1;
     }
+    
     /**
+     * Added for project extension: auto-solver
      * Fills the specified aquarium f number of squares deep. 
      */
     public void fillAquarium(int a, int f) {
@@ -218,6 +221,7 @@ public class Aquarium
             }
         }
     }
+    
     public ArrayList<Integer> getAquariumIDs() {
         ArrayList<Integer> ids = new ArrayList<Integer>();
         for (int[] row: aquariums) {
