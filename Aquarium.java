@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 /**
  * Aquarium represents a single problem in the game Aquarium.
  *
@@ -222,6 +223,10 @@ public class Aquarium
         }
     }
     
+    /**
+     * Added for project extension: auto-solver
+     * Returns IDs of aquariums that exist in the puzzle.
+     */
     public ArrayList<Integer> getAquariumIDs() {
         ArrayList<Integer> ids = new ArrayList<Integer>();
         for (int[] row: aquariums) {
@@ -232,5 +237,32 @@ public class Aquarium
             }
         }
         return ids;
+    }
+    
+    /**
+     * Added for project extension: auto-solver
+     * Returns IDs of aquariums that exist on a given row.
+     */
+    public HashMap<Integer,Integer> getAquariumsOnRow(int rowNum) {
+        HashMap<Integer,Integer> ids = new HashMap<Integer,Integer>();
+        for (int id: aquariums[rowNum]) {
+            if (!ids.containsKey(id)){
+                ids.put(id,1);
+            } else {
+                ids.put(id,ids.get(id)+1); //Increment existing value by one
+            }
+        }
+        return ids;
+    }
+    
+    /**
+     * Added for project extension: auto-solver
+     * Returns true if the aqarium ID given is on the row given, else false.
+     */
+    public Boolean aquariumOnRow(int aquarium, int rowNum) {
+        for (Integer cell : aquariums[rowNum]) {
+            if (cell.equals(aquarium)) {return true;}
+        }
+        return false;
     }
 }

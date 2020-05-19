@@ -202,5 +202,8 @@ public class CheckSolution
             }
         }
         return "\u2713\u2713\u2713";
-    } 
+    }
+    public static void solve(Aquarium p) {
+        
+    }
 }
