@@ -412,7 +412,7 @@ public class AquariumViewer implements MouseListener
                     32, 
                     WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, 
                     foreColor);
-                if (solveText == "\u2713\u2713\u2713") { // if correct
+                if (solveText.equals("\u2713\u2713\u2713")) { // if correct
                     solveTime = Duration.between(startTime, clock.instant());
                     sc.drawString(
                         "Solved in " + solveTime.getSeconds() + " seconds.", 
