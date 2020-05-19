@@ -289,12 +289,14 @@ public class CheckSolution
         
 
         
-        int updates = 2;
+        int updates = 10;
         for (int i = 0; i < updates; i++)
         {
             System.out.println("-------------------------------------------------------");
             updateGroupRowStatuses(p, groupRowStatus);
             updateAquariumLevels(p, groupRowStatus);
+            if (isSolution(p).equals("\u2713\u2713\u2713"))
+            {break;}
         }
     }
     
@@ -311,9 +313,21 @@ public class CheckSolution
                     groupRowStatus[group][groupRow] = p.findAquariumRowLegality(group+1, groupRow);
                     System.out.println("status group, grouprow, legal? "+(group+1)+" "+groupRow+" "+groupRowStatus[group][groupRow]);
                     // UPDATE ABOVE AND BELOW GOES HERE
+                    if (groupRowStatus[group][groupRow] == 1)
+                        {fillRange(groupRowStatus[group], groupRow, groupRowStatus[group].length-1, 1);}
+                    if (groupRowStatus[group][groupRow] == -1)
+                        {fillRange(groupRowStatus[group], 0, groupRow, -1);}
                 }
             }
         }  
+    }
+    
+    public static void fillRange(int[] list, int start, int end, int value)
+    {
+        for (int i = start; i <= end; i++)
+        {
+            list[i] = value;
+        }
     }
     
     public static void updateAquariumLevels(Aquarium p, int[][] groupRowStatus)

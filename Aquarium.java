@@ -291,19 +291,18 @@ public class Aquarium
         }
         
         int row = firstAppearance + rowWithinGroup;
+        
         // iff groupRow + existing water is more than this line can handle
-        if (  getAquariumRowWidth(group, row)
-            + getCurrentRowWaterAmount(row)
-            
-            > rowTotals[row]  ) 
+        if (  getAquariumRowWidth(group, row) + getCurrentRowWaterAmount(row)
+                                              > rowTotals[row]  ) 
         {
             return -1;//illegal
         }
-        else if (  size
-                 - getCurrentRowWaterAmount(row)
-                 - getCurrentRowAirAmount(row)
-                 - getAquariumRowWidth(group, row)  
-                 < rowTotals[row] - getCurrentRowWaterAmount(row)  ) 
+        else if (  size - getCurrentRowWaterAmount(row)
+                        - getCurrentRowAirAmount(row)
+                        - getAquariumRowWidth(group, row)  
+                        < rowTotals[row]
+                        - getCurrentRowWaterAmount(row)  ) 
         {   // iff row is impossible without this groupRow
             System.out.println("group" +group);
             System.out.println("rowWithinGroup"+rowWithinGroup);
