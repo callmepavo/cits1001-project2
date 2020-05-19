@@ -241,7 +241,7 @@ public class Aquarium
     
     /**
      * Added for project extension: auto-solver
-     * Returns IDs of aquariums that exist on a given row.
+     * Returns IDs and width of aquariums that exist on a given row.
      */
     public HashMap<Integer,Integer> getAquariumsOnRow(int rowNum) {
         HashMap<Integer,Integer> ids = new HashMap<Integer,Integer>();

@@ -439,7 +439,7 @@ public class AquariumViewer implements MouseListener
                 toggleDarkMode();
             } else if (x < WINDOWSIZE-BOXSIZE && x > WINDOWSIZE-(BOXSIZE*4)) {
                 if (puzzle.getSize() < solvePuzzleSize) {
-                    //CheckSolution.solve(puzzle);
+                    CheckSolution.solve(puzzle);
                     this.displayPuzzle();
                 }
             }

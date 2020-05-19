@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.Arrays; //Testing
+import java.util.HashMap;
 /**
  * CheckSolution is a utility class which can check if
  * a board position in an Aquarium puzzle is a solution.
@@ -205,5 +205,14 @@ public class CheckSolution
     }
     public static void solve(Aquarium p) {
         
+    }
+    
+    /**
+     * TODO:
+     * Added for project extension: auto-solver
+     * Returns an arraylist of different combinations of aquariums that correctly add to the row sum.
+     */
+    private static ArrayList<ArrayList<Integer>> rowSolutions(HashMap<Integer,Integer> rowAquariums, int sum) {
+        return null;
     }
 }
