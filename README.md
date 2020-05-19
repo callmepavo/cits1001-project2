@@ -21,6 +21,11 @@ A Java program to allow a user to play the game Aquarium
 ## Extension ideas:
 + Auto solve
 	+ Should add comments to the solving algorithm 
+	+ Rewrite algorithm to improve time complexity
+		1. From bottom row to top row, determine possible aquarium configurations to satisfy the sum on that row
+		2. The aquarium configuration is only valid if every aquarium is filled or non-existent in the row below
+		3. For rows with only one possible configuration for any aquarium, all rows below must discard configurations where that tank isn't filled
+
 + ~~Dark theme :^)~~ complete
 + ~~Timer~~ complete
 + Puzzle generator
