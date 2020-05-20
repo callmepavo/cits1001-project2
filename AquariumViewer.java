@@ -33,7 +33,7 @@ public class AquariumViewer implements MouseListener
     private Instant startTime;
     private Duration solveTime; 
     
-    private int solvePuzzleSize = 8;
+    private int solvePuzzleSize = 16;
 
     /**
      * Main constructor for objects of class AquariumViewer.

@@ -280,7 +280,7 @@ public class CheckSolution
      * Returns an arraylist of different combinations of aquariums that correctly add to the row sum.
      */
     private static ArrayList<LinkedHashMap<Integer,Boolean>> rowSolutions(HashMap<Integer,Integer> rowAquariums, int rowTotal) {
-        double n = Math.pow(2,rowAquariums.size())-1;
+        double n = Math.pow(2,rowAquariums.size());
         ArrayList<LinkedHashMap<Integer,Boolean>> rowCombinations = new ArrayList<LinkedHashMap<Integer,Boolean>>();
         LinkedHashMap<Integer,Boolean> rowCombination = new LinkedHashMap<Integer,Boolean>();
         for (int k : rowAquariums.keySet()) { //Initialise aquariums as false
