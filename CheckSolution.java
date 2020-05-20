@@ -242,26 +242,26 @@ public class CheckSolution
                     }
                 }
                 alwaysFilled.values().removeIf(n -> (!n)); // Remove all tanks which arn't always filled
-                System.out.println("> Line "+j+" has fixed tanks "+alwaysFilled.toString());
+                //System.out.println("> Line "+j+" has fixed tanks "+alwaysFilled.toString());
                 if (alwaysFilled.size() > 0) {
                     for (int n = new Integer(j)+1; n < p.getSize()-1; n++) { // For lines below this one
-                        System.out.println("-> Testing line "+n+" which has the following options "+puzzleSolutions[n].toString());
+                        //System.out.println("-> Testing line "+n+" which has the following options "+puzzleSolutions[n].toString());
                         
                         // A shallow copy of the line's possible solutions must be made as items are removed from the real one. 
                         ArrayList<LinkedHashMap<Integer,Boolean>> tempLineSolutions = (ArrayList<LinkedHashMap<Integer,Boolean>>) puzzleSolutions[n].clone();
                         for (int m = 0; m < tempLineSolutions.size(); m++) { // For potential solutions in line
-                            System.out.println("--> Testing solution "+tempLineSolutions.get(m).toString());
+                            //System.out.println("--> Testing solution "+tempLineSolutions.get(m).toString());
                             for (int filled : alwaysFilled.keySet()) { // For tanks that must be filled
                                 if (tempLineSolutions.get(m).containsKey(filled)) {
                                     if (!tempLineSolutions.get(m).get(filled)) {
-                                        System.out.println("---> Tank "+ filled +" empty, removing.");
+                                        //System.out.println("---> Tank "+ filled +" empty, removing.");
                                         puzzleSolutions[n].remove(tempLineSolutions.get(m));
                                         break;
                                     } else {
-                                        System.out.println("---> Tank "+ filled +", OK.");
+                                        //System.out.println("---> Tank "+ filled +", OK.");
                                     }
                                 } else {
-                                    System.out.println("---> Tank "+ filled +", OK.");
+                                    //System.out.println("---> Tank "+ filled +", OK.");
                                 }
                             }
                         }
