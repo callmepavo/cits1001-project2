@@ -223,6 +223,14 @@ public class Aquarium
         }
     }
     
+    public void fillAquariumRow(int r, Integer a, Space f) {
+        for (int i = 0; i < size; i++) {
+            if (a.equals(aquariums[r][i])) {
+                spaces[r][i] = f;
+            }
+        }
+    }
+    
     /**
      * Added for project extension: auto-solver
      * Returns IDs of aquariums that exist in the puzzle.

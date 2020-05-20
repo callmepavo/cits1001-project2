@@ -209,21 +209,68 @@ public class CheckSolution
     
     public static void solve(Aquarium p) {
         System.out.println("----- SOLVE -----");
+        ArrayList<LinkedHashMap<Integer,Boolean>>[] puzzleSolutions = new ArrayList[p.getSize()];
         ArrayList<LinkedHashMap<Integer,Boolean>> row = new ArrayList<LinkedHashMap<Integer,Boolean>>();
-        ArrayList<LinkedHashMap<Integer,Boolean>> lastRow;
+        //ArrayList<LinkedHashMap<Integer,Boolean>> lastRow;
         for (Integer j = p.getSize()-1; j >= 0 ; j--) {
-            lastRow = new ArrayList<LinkedHashMap<Integer,Boolean>>(row); //Shallow copy
+            //lastRow = new ArrayList<LinkedHashMap<Integer,Boolean>>(row); //Shallow copy
             row = rowSolutions(p.getAquariumsOnRow(j), p.getRowTotals()[j]);
             
-            for (int n = 0; n < row.size(); n++) {
-                if (checkRow(row.get(n),lastRow)) {
-                    row.remove(n);
+            //Only rows after bottom row
+            if (j != p.getSize()-1) {
+                // Check combinations on this row with the combinations on the previous row
+                // If a tank is filled on this row and empty on the previous, remove that combination.
+                for (int n = 0; n < row.size(); n++) {
+                    if (checkRow(row.get(n),puzzleSolutions[j+1])) {
+                        //System.out.println("Removing "+j+" "+row.get(n).toString());
+                        row.remove(n);
+                    } else {
+                        //System.out.println("Keeping  "+j+" "+row.get(n).toString());
+                    }
+                }
+                
+                // Check combinations on this row for tanks that must be filled.
+                // Remove combinations in previous rows where this tank isn't filled. 
+                LinkedHashMap<Integer,Boolean> alwaysFilled = new LinkedHashMap<Integer,Boolean>();
+                for (int aquariumID : p.getAquariumsOnRow(j).keySet()) {
+                    alwaysFilled.put(aquariumID, true);
+                    for (LinkedHashMap<Integer,Boolean> solution : row) {
+                        if (!solution.get(aquariumID)) {
+                            alwaysFilled.put(aquariumID, false);
+                            break;
+                        }
+                    }
+                }
+                alwaysFilled.values().removeIf(n -> (!n)); // Remove all tanks which arn't always filled
+                for (int n = new Integer(j)+1; n < p.getSize()-1; n++) {
+                    for (int m = 0; m < puzzleSolutions[n].size(); m++) {
+                        for (Entry filled : alwaysFilled.entrySet()) {
+                            if (puzzleSolutions[n].get(m).containsKey(filled.getKey())) {
+                                if (!puzzleSolutions[n].get(m).get(filled.getKey())) {
+                                    puzzleSolutions[n].remove(m);
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
-
-            for (LinkedHashMap<Integer,Boolean> i : row) {
-                System.out.println(j.toString()+" "+i.toString());
-            }
+            
+            puzzleSolutions[j] = row;
+        }
+        
+        // Debug print to console
+        for (ArrayList<LinkedHashMap<Integer,Boolean>> potentialSolutions : puzzleSolutions) {
+            System.out.println(potentialSolutions.toString());
+        }
+        
+        // Fill in rows that we know already
+        for (int i = 0; i < p.getSize(); i++) {
+            if (puzzleSolutions[i].size() == 1) {
+                for (Entry<Integer,Boolean> entry : puzzleSolutions[i].get(0).entrySet()) {
+                    p.fillAquariumRow(i,entry.getKey(),entry.getValue()? Space.WATER : Space.AIR);
+                }
+            } 
         }
     }
     
