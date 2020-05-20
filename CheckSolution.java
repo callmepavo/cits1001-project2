@@ -206,9 +206,12 @@ public class CheckSolution
         }
         return "\u2713\u2713\u2713";
     }
+    
     public static void solve(Aquarium p) {
-        for (LinkedHashMap<Integer,Boolean> i : rowSolutions(p.getAquariumsOnRow(4), p.getRowTotals()[4])) {
-            System.out.println(i);
+        for (Integer j = 0; j < p.getSize(); j++) {
+            for (LinkedHashMap<Integer,Boolean> i : rowSolutions(p.getAquariumsOnRow(j), p.getRowTotals()[j])) {
+                System.out.println(j.toString()+i.toString());
+            }
         }
     }
     
@@ -242,7 +245,6 @@ public class CheckSolution
                     deepCopy.put(new Integer(aquarium.getKey()),new Boolean(aquarium.getValue()));
                 }
                 rowCombinations.add(deepCopy);
-                System.out.println(sum);
             }
             rowCombination = incrementAquariums(rowCombination);
         }
