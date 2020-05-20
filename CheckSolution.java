@@ -208,9 +208,21 @@ public class CheckSolution
     }
     
     public static void solve(Aquarium p) {
-        for (Integer j = 0; j < p.getSize(); j++) {
-            for (LinkedHashMap<Integer,Boolean> i : rowSolutions(p.getAquariumsOnRow(j), p.getRowTotals()[j])) {
-                System.out.println(j.toString()+i.toString());
+        System.out.println("----- SOLVE -----");
+        ArrayList<LinkedHashMap<Integer,Boolean>> row = new ArrayList<LinkedHashMap<Integer,Boolean>>();
+        ArrayList<LinkedHashMap<Integer,Boolean>> lastRow;
+        for (Integer j = p.getSize()-1; j >= 0 ; j--) {
+            lastRow = new ArrayList<LinkedHashMap<Integer,Boolean>>(row); //Shallow copy
+            row = rowSolutions(p.getAquariumsOnRow(j), p.getRowTotals()[j]);
+            
+            for (int n = 0; n < row.size(); n++) {
+                if (checkRow(row.get(n),lastRow)) {
+                    row.remove(n);
+                }
+            }
+
+            for (LinkedHashMap<Integer,Boolean> i : row) {
+                System.out.println(j.toString()+" "+i.toString());
             }
         }
     }
@@ -239,12 +251,7 @@ public class CheckSolution
                 }
             }
             if (sum.equals(rowTotal)) {
-                // Create a deepcopy of rowCombination so it can be used for further processing without changing this
-                LinkedHashMap<Integer,Boolean> deepCopy = new LinkedHashMap<Integer,Boolean>();
-                for (Entry<Integer,Boolean> aquarium : rowCombination.entrySet()) {
-                    deepCopy.put(new Integer(aquarium.getKey()),new Boolean(aquarium.getValue()));
-                }
-                rowCombinations.add(deepCopy);
+                rowCombinations.add(deepCopy(rowCombination));
             }
             rowCombination = incrementAquariums(rowCombination);
         }
@@ -274,5 +281,38 @@ public class CheckSolution
             rowAquariums.put(key,false);
         }
         return rowAquariums;
+    }
+    
+    private static LinkedHashMap<Integer,Boolean> deepCopy(LinkedHashMap<Integer,Boolean> original) {
+        // Create a deepcopy so the original can be used for further processing
+        LinkedHashMap<Integer,Boolean> copy = new LinkedHashMap<Integer,Boolean>();
+        for (Entry<Integer,Boolean> entry : original.entrySet()) {
+            copy.put(new Integer(entry.getKey()),new Boolean(entry.getValue()));
+        }
+        return copy;
+    }
+    
+    private static Boolean checkRow(LinkedHashMap<Integer,Boolean> n, ArrayList<LinkedHashMap<Integer,Boolean>> lastRow) {
+        Boolean remove = true;
+        if (lastRow.size() == 0) { 
+            System.out.println("Previous row empty");
+            return false; 
+        }
+        
+        for (LinkedHashMap<Integer,Boolean> solution : lastRow) {
+            Boolean valid = true;
+            for (Entry<Integer,Boolean> entry : n.entrySet()) {
+                if (solution.containsKey(entry.getKey())) {
+                    if (!solution.get(entry.getKey()) && entry.getValue()){
+                        valid = false;
+                    }
+                }
+            }
+            if (valid && remove) {
+                remove = false;
+            }
+        }
+        
+        return remove;
     }
 }
