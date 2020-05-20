@@ -1,6 +1,7 @@
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.lang.Math;
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 /**
  * CheckSolution is a utility class which can check if
  * a board position in an Aquarium puzzle is a solution.
@@ -213,8 +214,31 @@ public class CheckSolution
      * Added for project extension: auto-solver
      * Returns an arraylist of different combinations of aquariums that correctly add to the row sum.
      */
-    private static ArrayList<HashMap<Integer,Integer>> rowSolutions(HashMap<Integer,Integer> rowAquariums, int sum) {
-        return null;
+    private static ArrayList<LinkedHashMap<Integer,Boolean>> rowSolutions(LinkedHashMap<Integer,Integer> rowAquariums, int rowTotal) {
+        double n = Math.pow(2,rowAquariums.size());
+        ArrayList<LinkedHashMap<Integer,Boolean>> rowCombinations = new ArrayList<LinkedHashMap<Integer,Boolean>>();
+        LinkedHashMap<Integer,Boolean> rowCombination = new LinkedHashMap<Integer,Boolean>();
+        for (int k : rowAquariums.keySet()) { //Initialise aquariums as false
+            rowCombination.put(k,false);
+        }
+        
+        for (int i = 0; i < n; i++) {
+            Integer sum = 0;
+            for (Entry<Integer,Boolean> aquarium : rowCombination.entrySet()) {
+                if (aquarium.getValue()) {
+                    sum += rowAquariums.get(aquarium.getKey());
+                }
+                if (sum > rowTotal) {
+                    break;
+                }
+            }
+            if (sum.equals(rowTotal)) {
+                rowCombinations.add(rowCombination);
+            }
+            rowCombination = incrementAquariums(rowCombination);
+        }
+        
+        return rowCombinations;
     }
     
     /**
@@ -222,11 +246,11 @@ public class CheckSolution
      * Added for project extension: auto-solver
      * Increments given aquarium combination by one.
      */
-    private static LinkedHashMap<Integer,Integer> incrementAquariums(LinkedHashMap<Integer,Integer> rowAquariums) {
+    private static LinkedHashMap<Integer,Boolean> incrementAquariums(LinkedHashMap<Integer,Boolean> rowAquariums) {
         Integer i = 0;
         for (int key : rowAquariums.keySet()) {
-            if (rowAquariums.get(key).equals(0)) {
-                rowAquariums.put(key,1);
+            if (!rowAquariums.get(key)) {
+                rowAquariums.put(key,true);
                 i = key;
                 break;
             }
@@ -236,7 +260,7 @@ public class CheckSolution
             if (i.equals(key)) {
                 break;
             }
-            rowAquariums.put(key,0);
+            rowAquariums.put(key,false);
         }
         return rowAquariums;
     }
