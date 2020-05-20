@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.lang.Math;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 /**
@@ -206,7 +207,9 @@ public class CheckSolution
         return "\u2713\u2713\u2713";
     }
     public static void solve(Aquarium p) {
-        
+        for (LinkedHashMap<Integer,Boolean> i : rowSolutions(p.getAquariumsOnRow(4), p.getRowTotals()[4])) {
+            System.out.println(i);
+        }
     }
     
     /**
@@ -214,8 +217,8 @@ public class CheckSolution
      * Added for project extension: auto-solver
      * Returns an arraylist of different combinations of aquariums that correctly add to the row sum.
      */
-    private static ArrayList<LinkedHashMap<Integer,Boolean>> rowSolutions(LinkedHashMap<Integer,Integer> rowAquariums, int rowTotal) {
-        double n = Math.pow(2,rowAquariums.size());
+    private static ArrayList<LinkedHashMap<Integer,Boolean>> rowSolutions(HashMap<Integer,Integer> rowAquariums, int rowTotal) {
+        double n = Math.pow(2,rowAquariums.size())-1;
         ArrayList<LinkedHashMap<Integer,Boolean>> rowCombinations = new ArrayList<LinkedHashMap<Integer,Boolean>>();
         LinkedHashMap<Integer,Boolean> rowCombination = new LinkedHashMap<Integer,Boolean>();
         for (int k : rowAquariums.keySet()) { //Initialise aquariums as false
@@ -233,7 +236,13 @@ public class CheckSolution
                 }
             }
             if (sum.equals(rowTotal)) {
-                rowCombinations.add(rowCombination);
+                // Create a deepcopy of rowCombination so it can be used for further processing without changing this
+                LinkedHashMap<Integer,Boolean> deepCopy = new LinkedHashMap<Integer,Boolean>();
+                for (Entry<Integer,Boolean> aquarium : rowCombination.entrySet()) {
+                    deepCopy.put(new Integer(aquarium.getKey()),new Boolean(aquarium.getValue()));
+                }
+                rowCombinations.add(deepCopy);
+                System.out.println(sum);
             }
             rowCombination = incrementAquariums(rowCombination);
         }
