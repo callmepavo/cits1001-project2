@@ -377,15 +377,16 @@ public class CheckSolution
     }
     
     
-    public static ArrayList<String> newPuzzle(int size)
+    public static Aquarium newPuzzle(int size)
     {
         int[][] groups = generateGroups(size);
         ArrayList<String> lines = new ArrayList<String>();
-        
-        return lines;
+        int[][] totals = generateTotals(groups);
+        Aquarium p = new Aquarium(groups, totals);
+        return p;
     }
     
-    public static int[][] generateGroups(int size)
+    private static int[][] generateGroups(int size)
     {
         int[][] groups = new int[size][size];
         double rnd = 0.0;
@@ -445,5 +446,7 @@ public class CheckSolution
     return groups;    
     }
     
+    private static int[][] generateTotals(int[][] groups)
+    {return groups;}
     
 }
