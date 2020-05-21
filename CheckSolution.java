@@ -375,4 +375,75 @@ public class CheckSolution
         
         return remove;
     }
+    
+    
+    public static ArrayList<String> newPuzzle(int size)
+    {
+        int[][] groups = generateGroups(size);
+        ArrayList<String> lines = new ArrayList<String>();
+        
+        return lines;
+    }
+    
+    public static int[][] generateGroups(int size)
+    {
+        int[][] groups = new int[size][size];
+        double rnd = 0.0;
+        int currentMax = 0;
+        for (int r = 0; r < size; r++)
+        {
+            for (int c = 0; c < size; c++)
+            {
+                currentMax++;
+                boolean aboveExists = r != 0;
+                boolean leftExists = c != 0;
+                rnd = Math.random();
+                if (r == size-1 && c == size-1) // if last cell
+                { // ensure its always the highest value
+                    if (groups[r][c-1] == currentMax-1)
+                    {
+                        groups[r][c] = groups[r][c-1];
+                        continue;
+                    }
+                } 
+                else if (aboveExists && leftExists) // 3 options
+                {
+                    rnd *= 3;
+                    if (rnd < 1)
+                    {
+                        groups[r][c] = groups[r][c-1];
+                        continue;
+                    }
+                    else if (rnd > 2)
+                    {
+                        groups[r][c] = groups[r-1][c];
+                        continue;
+                    }
+                    
+                }
+                else if (aboveExists) // 2 options
+                {
+                    rnd *= 2;
+                    if (rnd < 1)
+                    {
+                        groups[r][c] = groups[r-1][c];
+                        continue;
+                    }
+                }
+                else if (leftExists) // 2 options
+                {
+                    rnd *= 2;
+                    if (rnd < 1)
+                    {
+                        groups[r][c] = groups[r][c-1];
+                        continue;
+                    }
+                }
+                groups[r][c] = currentMax;
+            }
+        }
+    return groups;    
+    }
+    
+    
 }
