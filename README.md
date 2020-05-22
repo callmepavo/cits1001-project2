@@ -28,4 +28,4 @@ A Java program to allow a user to play the game Aquarium
 
 + ~~Dark theme :^)~~ complete
 + ~~Timer~~ complete
-+ Puzzle generator
++ ~~Puzzle generator~~ complete
