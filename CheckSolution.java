@@ -376,38 +376,24 @@ public class CheckSolution
         return remove;
     }
     
-    
+    /**
+     * Returns a new aquarium object with a randomly generated
+     * puzzle of size size.
+     */
     public static Aquarium newPuzzle(int size)
     {
         int[][] groups = generateGroups(size);
-        for (int[] row : groups)
-        {    
-            System.out.println();
-            for (int i : row)
-                System.out.print(i+"\t");
-        
-        }
         Space[][] spaces = new Space[size][size];
         fillAllGroups(groups, spaces);
         int[][] totals = generateTotals(spaces);
         Aquarium p = new Aquarium(groups, totals);
 
-        
-        for (Space[] s : spaces)
-        {
-            System.out.println();
-            for (Space s2 : s)
-            {
-                if (s2 == Space.WATER)
-                {System.out.print("W\t");}
-                else{System.out.print("H\t");}
-            }
-        }
-        
         return p;
     }
     
-    // Returns an int[][] of new group shapes
+    /** 
+     * Returns an int[][] of new group shapes of size size
+     */
     private static int[][] generateGroups(int size)
     {
         int[][] groups = new int[size][size];
@@ -466,6 +452,9 @@ public class CheckSolution
     return groups;    
     }
     
+    /**
+     * Iterates through groups and calls fillGroup() for each
+     */
     private static void fillAllGroups(int[][] groups, Space[][] spaces)
     {
         int maxGroup = groups[groups.length-1][groups.length-1];
@@ -475,6 +464,9 @@ public class CheckSolution
         }
     }
     
+    /**
+     * Fills a random number of rows from bottom up in group groupToFill with water
+     */
     private static void fillGroup(int groupToFill, int[][] groups, Space[][] spaces)
     {
         
@@ -500,7 +492,6 @@ public class CheckSolution
                 }
                 if (groups[r][c] == groupToFill) {anyInRow = true;}
             }
-            System.out.println("r,foundtop,anyinrow "+r+","+foundTop+","+anyInRow);
             if (foundTop && !anyInRow)
             {
                 bottomRow = r-1;
@@ -510,16 +501,12 @@ public class CheckSolution
         
         java.util.Random rnd = new java.util.Random();
         
-        System.out.println("group\t"+ groupToFill);
-        System.out.println("toprow\t"+topRow);
-        System.out.println("bottomrow\t"+bottomRow);
         int height = bottomRow-topRow+1;
         int rowsToFill = rnd.nextInt(height+1); //number of rows to fill
-        System.out.println("rowsToFill\t"+rowsToFill);
         for (int i = 0; i < rowsToFill; i++)
         {
             int r = bottomRow - i;
-            if (rowsToFill < 0) {break;}
+            if (rowsToFill < 0) {break;} // in case bottom row error
             for (int c = 0; c < groups.length; c++)
             {
                 if (groups[r][c] == groupToFill)
@@ -532,6 +519,13 @@ public class CheckSolution
         
     }
     
+    /**
+     * Counts the totals of each line and column in spaces.
+     * Cribbed shamelessly from columnCounts() and rowCounts()
+     * Returns int[][].
+     * generateTotals[0] = columnCount[]
+     * generateTotals[1] = rowCount
+     */
     private static int[][] generateTotals(Space[][] spaces)
     {
         int[] rowCount = new int[spaces.length];
