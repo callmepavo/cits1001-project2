@@ -295,6 +295,20 @@ public class AquariumViewer implements MouseListener
             WINDOWSIZE-(BOXSIZE/4)*3, 
             (BOXSIZE/4)*3-4, 
             Color.black);
+        // Draw new puzzle button
+        sc.drawRectangle(
+            WINDOWSIZE-BOXSIZE,
+            BOXSIZE,
+            WINDOWSIZE,
+            2*BOXSIZE,
+            Color.green);
+        sc.setFont(new Font("Segoe UI Symbol",1,30));
+        String newPuzzleButton = "+";
+        sc.drawString(
+            newPuzzleButton, 
+            WINDOWSIZE-(BOXSIZE/4)*3, 
+            BOXSIZE+(BOXSIZE/4)*3, 
+            Color.black);
     }
     
     /**
@@ -371,6 +385,19 @@ public class AquariumViewer implements MouseListener
         displayPuzzle();
     }
     
+    public void createNewPuzzle()
+    {
+        puzzle = CheckSolution.newPuzzle(size);
+        sc.drawRectangle(
+                    0,
+                    0,
+                    WINDOWSIZE,
+                    WINDOWSIZE,
+                    backColor);
+        this.displayPuzzle();
+        startTime = clock.instant();
+    }
+    
     /**
      * Responds to a mouse click. 
      * If it's on the board, make the appropriate move and update the screen display. 
@@ -442,6 +469,10 @@ public class AquariumViewer implements MouseListener
                     CheckSolution.solve(puzzle);
                     this.displayPuzzle();
                 }
+            }
+        } else if (OFFSET > y) {
+            if (x > WINDOWSIZE-BOXSIZE) { // new puzzle button
+                createNewPuzzle();
             }
         }
     }
