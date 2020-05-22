@@ -57,7 +57,23 @@ public class Aquarium
     {
         this("Examples/a6_1.txt");
     }
-
+    
+    public Aquarium(int[][] groups, int[][] totals)
+    {
+        size = groups.length;
+        aquariums = groups;
+        columnTotals = totals[0];
+        rowTotals = totals[1];
+        spaces = new Space[size][size];
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                spaces[x][y] = Space.EMPTY;
+            }
+        }
+    }
+    
     /**
      * Returns an array containing the ints in s, 
      * each of which is separated by one space. 
