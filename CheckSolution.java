@@ -380,10 +380,6 @@ public class CheckSolution
     public static Aquarium newPuzzle(int size)
     {
         int[][] groups = generateGroups(size);
-        Space[][] spaces = new Space[size][size];
-        fillAllGroups(groups, spaces);
-        int[][] totals = generateTotals(spaces);
-        Aquarium p = new Aquarium(groups, totals);
         for (int[] row : groups)
         {    
             System.out.println();
@@ -391,7 +387,23 @@ public class CheckSolution
                 System.out.print(i+"\t");
         
         }
+        Space[][] spaces = new Space[size][size];
+        fillAllGroups(groups, spaces);
+        int[][] totals = generateTotals(spaces);
+        Aquarium p = new Aquarium(groups, totals);
 
+        
+        for (Space[] s : spaces)
+        {
+            System.out.println();
+            for (Space s2 : s)
+            {
+                if (s2 == Space.WATER)
+                {System.out.print("W\t");}
+                else{System.out.print("H\t");}
+            }
+        }
+        
         return p;
     }
     
@@ -457,7 +469,7 @@ public class CheckSolution
     private static void fillAllGroups(int[][] groups, Space[][] spaces)
     {
         int maxGroup = groups[groups.length-1][groups.length-1];
-        for (int groupNum = 0; groupNum <= maxGroup; groupNum++)
+        for (int groupNum = 1; groupNum <= maxGroup; groupNum++)
         {
             fillGroup(groupNum, groups, spaces);
         }
@@ -469,7 +481,7 @@ public class CheckSolution
         // Calculate group top and bottom
         boolean foundTop = false;
         int topRow = 0;
-        int bottomRow = 0;
+        int bottomRow = groups.length-1;
         for (int r = 0; r < groups.length; r++)
         {
             boolean anyInRow = false;
@@ -481,23 +493,33 @@ public class CheckSolution
                     {
                         topRow = r;
                         foundTop = true;
+                        anyInRow = true;
                         break;
                     }
                     
                 }
                 if (groups[r][c] == groupToFill) {anyInRow = true;}
             }
+            System.out.println("r,foundtop,anyinrow "+r+","+foundTop+","+anyInRow);
             if (foundTop && !anyInRow)
             {
-                bottomRow = r;
+                bottomRow = r-1;
                 break;
             }
         }
         
         java.util.Random rnd = new java.util.Random();
-        int rowsToFill = rnd.nextInt(bottomRow-topRow)+topRow; //number of rows to fill
-        for (int r = bottomRow; r >= rowsToFill; r--)
+        
+        System.out.println("group\t"+ groupToFill);
+        System.out.println("toprow\t"+topRow);
+        System.out.println("bottomrow\t"+bottomRow);
+        int height = bottomRow-topRow+1;
+        int rowsToFill = rnd.nextInt(height+1); //number of rows to fill
+        System.out.println("rowsToFill\t"+rowsToFill);
+        for (int i = 0; i < rowsToFill; i++)
         {
+            int r = bottomRow - i;
+            if (rowsToFill < 0) {break;}
             for (int c = 0; c < groups.length; c++)
             {
                 if (groups[r][c] == groupToFill)
