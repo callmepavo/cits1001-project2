@@ -231,6 +231,7 @@ public class CheckSolution
                 
                 // Check combinations on this row for tanks that must be filled.
                 // Remove combinations in previous rows where this tank isn't filled. 
+                /*
                 LinkedHashMap<Integer,Boolean> alwaysFilled = new LinkedHashMap<Integer,Boolean>();
                 for (int aquariumID : p.getAquariumsOnRow(j).keySet()) {
                     alwaysFilled.put(aquariumID, true);
@@ -241,40 +242,78 @@ public class CheckSolution
                         }
                     }
                 }
+                System.out.println("> Line "+j+" has fixed tanks "+alwaysFilled.toString());
                 alwaysFilled.values().removeIf(n -> (!n)); // Remove all tanks which arn't always filled
-                //System.out.println("> Line "+j+" has fixed tanks "+alwaysFilled.toString());
+                
                 if (alwaysFilled.size() > 0) {
                     for (int n = new Integer(j)+1; n < p.getSize()-1; n++) { // For lines below this one
-                        //System.out.println("-> Testing line "+n+" which has the following options "+puzzleSolutions[n].toString());
+                        System.out.println("-> Testing line "+n+" which has the following options "+puzzleSolutions[n].toString());
                         
                         // A shallow copy of the line's possible solutions must be made as items are removed from the real one. 
                         ArrayList<LinkedHashMap<Integer,Boolean>> tempLineSolutions = (ArrayList<LinkedHashMap<Integer,Boolean>>) puzzleSolutions[n].clone();
                         for (int m = 0; m < tempLineSolutions.size(); m++) { // For potential solutions in line
-                            //System.out.println("--> Testing solution "+tempLineSolutions.get(m).toString());
+                            System.out.println("--> Testing solution "+tempLineSolutions.get(m).toString());
                             for (int filled : alwaysFilled.keySet()) { // For tanks that must be filled
                                 if (tempLineSolutions.get(m).containsKey(filled)) {
                                     if (!tempLineSolutions.get(m).get(filled)) {
-                                        //System.out.println("---> Tank "+ filled +" empty, removing.");
+                                        System.out.println("---> Tank "+ filled +" empty, removing.");
                                         puzzleSolutions[n].remove(tempLineSolutions.get(m));
                                         break;
                                     } else {
-                                        //System.out.println("---> Tank "+ filled +", OK.");
+                                        System.out.println("---> Tank "+ filled +", OK.");
                                     }
                                 } else {
-                                    //System.out.println("---> Tank "+ filled +", OK.");
+                                    System.out.println("---> Tank "+ filled +", OK.");
                                 }
                             }
                         }
                     }
-                }
+                }*/
+                for (int n = new Integer(j)+1; n < p.getSize()-1; n++) { // For lines below this one
+                        //System.out.println("> Testing line "+n+" which has the following options "+puzzleSolutions[n].toString());
+                        
+                        // A shallow copy of the line's possible solutions must be made as items are removed from the real one. 
+                        ArrayList<LinkedHashMap<Integer,Boolean>> tempLineSolutions = (ArrayList<LinkedHashMap<Integer,Boolean>>) puzzleSolutions[n].clone();
+                        for (int m = 0; m < tempLineSolutions.size(); m++) { // For potential solutions in previous line
+                            //System.out.println("-> Testing solution "+tempLineSolutions.get(m).toString());
+                            Boolean anyPossible = false;
+                            for (LinkedHashMap<Integer,Boolean> possibleSolution : row) { // For potential solutions in current line
+                                //System.out.println("--> Against "+ possibleSolution +"");
+                                Boolean possible = true;
+                                for (Entry<Integer,Boolean> tankID : possibleSolution.entrySet()) {
+                                    if (tempLineSolutions.get(m).containsKey(tankID.getKey())) {
+                                        if (tankID.getValue() && !tempLineSolutions.get(m).get(tankID.getKey())) {
+                                            //System.out.println("---> Tank "+ tankID.getKey() +" invalid.");
+                                            possible = false;
+                                            break;
+                                        } else {
+                                            //System.out.println("---> Tank "+ tankID.getKey() +", OK.");
+                                        }
+                                    } else {
+                                        //System.out.println("---> Tank "+ tankID.getKey() +", OK.");
+                                    }
+                                }
+                                if (possible) { anyPossible = true; }
+                            }
+                            if (!anyPossible) {
+                                System.out.println("--> " + tempLineSolutions.get(m).toString() + " Invalid, removing.");
+                                puzzleSolutions[n].remove(tempLineSolutions.get(m));
+                            }
+                        }
+                    }
+                
             }
+            
+            
             
             puzzleSolutions[j] = row;
         }
         
         // Debug print to console
+        int index = 0;
         for (ArrayList<LinkedHashMap<Integer,Boolean>> potentialSolutions : puzzleSolutions) {
-            System.out.println(potentialSolutions.toString());
+            System.out.println(index+potentialSolutions.toString());
+            index++;
         }
         
         // Fill in rows that we know already
@@ -375,4 +414,6 @@ public class CheckSolution
         
         return remove;
     }
+    
+    //private static 
 }
