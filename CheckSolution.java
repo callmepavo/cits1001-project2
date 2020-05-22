@@ -380,12 +380,22 @@ public class CheckSolution
     public static Aquarium newPuzzle(int size)
     {
         int[][] groups = generateGroups(size);
-        ArrayList<String> lines = new ArrayList<String>();
-        int[][] totals = generateTotals(groups);
+        Space[][] spaces = new Space[size][size];
+        fillAllGroups(groups, spaces);
+        int[][] totals = generateTotals(spaces);
         Aquarium p = new Aquarium(groups, totals);
+        for (int[] row : groups)
+        {    
+            System.out.println();
+            for (int i : row)
+                System.out.print(i+"\t");
+        
+        }
+
         return p;
     }
     
+    // Returns an int[][] of new group shapes
     private static int[][] generateGroups(int size)
     {
         int[][] groups = new int[size][size];
@@ -395,13 +405,13 @@ public class CheckSolution
         {
             for (int c = 0; c < size; c++)
             {
-                currentMax++;
+                
                 boolean aboveExists = r != 0;
                 boolean leftExists = c != 0;
-                rnd = Math.random();
+                rnd = Math.random()*10;
                 if (r == size-1 && c == size-1) // if last cell
                 { // ensure its always the highest value
-                    if (groups[r][c-1] == currentMax-1)
+                    if (groups[r][c-1] == currentMax)
                     {
                         groups[r][c] = groups[r][c-1];
                         continue;
@@ -409,13 +419,12 @@ public class CheckSolution
                 } 
                 else if (aboveExists && leftExists) // 3 options
                 {
-                    rnd *= 3;
-                    if (rnd < 1)
+                    if (rnd < 4)
                     {
                         groups[r][c] = groups[r][c-1];
                         continue;
                     }
-                    else if (rnd > 2)
+                    else if (rnd > 6)
                     {
                         groups[r][c] = groups[r-1][c];
                         continue;
@@ -424,8 +433,7 @@ public class CheckSolution
                 }
                 else if (aboveExists) // 2 options
                 {
-                    rnd *= 2;
-                    if (rnd < 1)
+                    if (rnd < 5)
                     {
                         groups[r][c] = groups[r-1][c];
                         continue;
@@ -433,20 +441,98 @@ public class CheckSolution
                 }
                 else if (leftExists) // 2 options
                 {
-                    rnd *= 2;
-                    if (rnd < 1)
+                    if (rnd < 5)
                     {
                         groups[r][c] = groups[r][c-1];
                         continue;
                     }
                 }
+                currentMax++;
                 groups[r][c] = currentMax;
             }
         }
     return groups;    
     }
     
-    private static int[][] generateTotals(int[][] groups)
-    {return groups;}
+    private static void fillAllGroups(int[][] groups, Space[][] spaces)
+    {
+        int maxGroup = groups[groups.length-1][groups.length-1];
+        for (int groupNum = 0; groupNum <= maxGroup; groupNum++)
+        {
+            fillGroup(groupNum, groups, spaces);
+        }
+    }
+    
+    private static void fillGroup(int groupToFill, int[][] groups, Space[][] spaces)
+    {
+        
+        // Calculate group top and bottom
+        boolean foundTop = false;
+        int topRow = 0;
+        int bottomRow = 0;
+        for (int r = 0; r < groups.length; r++)
+        {
+            boolean anyInRow = false;
+            for (int c = 0; c < groups.length; c++)
+            {
+                if (!foundTop)
+                {
+                    if (groups[r][c] == groupToFill)
+                    {
+                        topRow = r;
+                        foundTop = true;
+                        break;
+                    }
+                    
+                }
+                if (groups[r][c] == groupToFill) {anyInRow = true;}
+            }
+            if (foundTop && !anyInRow)
+            {
+                bottomRow = r;
+                break;
+            }
+        }
+        
+        java.util.Random rnd = new java.util.Random();
+        int rowsToFill = rnd.nextInt(bottomRow-topRow)+topRow; //number of rows to fill
+        for (int r = bottomRow; r >= rowsToFill; r--)
+        {
+            for (int c = 0; c < groups.length; c++)
+            {
+                if (groups[r][c] == groupToFill)
+                {
+                    spaces[r][c] = Space.WATER;
+                }
+            }
+        }
+        
+        
+    }
+    
+    private static int[][] generateTotals(Space[][] spaces)
+    {
+        int[] rowCount = new int[spaces.length];
+        for (int r = 0; r < spaces.length; r++) {
+            int count = 0;
+            for (int c = 0; c < spaces[r].length; c++) {
+                if (spaces[r][c] == Space.WATER) {
+                    count++;
+                }
+            }
+            rowCount[r] = count;
+        }
+        int[] columnCount = new int[spaces.length];
+        for (int c = 0; c < spaces.length; c++) {
+            int count = 0;
+            for (int r = 0; r < spaces[c].length; r++) {
+                if (spaces[r][c] == Space.WATER) {
+                    count++;
+                }
+            }
+            columnCount[c] = count;
+        }
+        return new int[][]{columnCount,rowCount};
+    }
     
 }
