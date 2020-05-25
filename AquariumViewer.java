@@ -441,10 +441,16 @@ public class AquariumViewer implements MouseListener
                     foreColor);
                 if (solveText.equals("\u2713\u2713\u2713")) { // if correct
                     solveTime = Duration.between(startTime, clock.instant());
+                    sc.setFont(new Font("Consolas",1,15));
                     sc.drawString(
-                        "Solved in " + solveTime.getSeconds() + " seconds.", 
-                        32, 
-                        BOXSIZE/2+8, 
+                        "Solved in ", 
+                        BOXSIZE, 
+                        BOXSIZE/2-4, 
+                        foreColor);
+                    sc.drawString(
+                        solveTime.getSeconds() + " seconds. ", 
+                        BOXSIZE, 
+                        BOXSIZE/2+12, 
                         foreColor);
                     startTime = clock.instant();
                 }
