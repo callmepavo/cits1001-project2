@@ -476,10 +476,23 @@ public class AquariumViewer implements MouseListener
                         displayTime = solveTime.getNano()/1000000;
                         timeText = " milliseconds.";
                     }
+                    sc.setFont(new Font("Consolas",1,15));
+                    sc.drawRectangle(
+                        0,
+                        0,
+                        WINDOWSIZE,
+                        WINDOWSIZE,
+                        backColor);
+                    
                     sc.drawString(
-                        "Solved in " + displayTime + timeText, 
-                        32, 
-                        BOXSIZE/2+8, 
+                        "Solved in ", 
+                        BOXSIZE, 
+                        BOXSIZE/2-4, 
+                        foreColor);
+                    sc.drawString(
+                        displayTime + timeText, 
+                        BOXSIZE, 
+                        BOXSIZE/2+12, 
                         foreColor);
                     
                     this.displayPuzzle();
