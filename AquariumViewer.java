@@ -11,6 +11,7 @@
 import java.awt.*;
 import java.awt.event.*; 
 import javax.swing.SwingUtilities;
+import java.time.*;
 
 public class AquariumViewer implements MouseListener
 {
@@ -21,6 +22,18 @@ public class AquariumViewer implements MouseListener
     private Aquarium puzzle; // the internal representation of the puzzle
     private int        size; // the puzzle is size x size
     private SimpleCanvas sc; // the display window
+    
+    private Color foreColor = Color.black;
+    private Color backColor = Color.white;
+    private Color waterColor = Color.blue;
+    private Color altColor = Color.red;
+    private boolean darkMode = false;
+    
+    private Clock clock = Clock.systemUTC();
+    private Instant startTime;
+    private Duration solveTime; 
+    
+    private int solvePuzzleSize = 16;
 
     /**
      * Main constructor for objects of class AquariumViewer.
@@ -33,11 +46,15 @@ public class AquariumViewer implements MouseListener
         size = puzzle.getSize();
         
         WINDOWSIZE = (OFFSET*2) + (BOXSIZE*size);
-        sc = new SimpleCanvas("Aquarium Puzzle - Zach & Oliver", WINDOWSIZE, WINDOWSIZE, Color.white);
+        sc = new SimpleCanvas(
+            "Aquarium Puzzle - Zach & Oliver", 
+            WINDOWSIZE, WINDOWSIZE, backColor);
 
         sc.addMouseListener(this);
         
         this.displayPuzzle();
+        
+        startTime = clock.instant();
     }
     
     /**
@@ -110,8 +127,19 @@ public class AquariumViewer implements MouseListener
     {
         // TODO 9 - complete
         for (int s = 0; s < size+1; s++) {
-            sc.drawLine(OFFSET+(BOXSIZE*s), OFFSET, OFFSET+(BOXSIZE*s), OFFSET+(size*BOXSIZE), Color.black);
-            sc.drawLine(OFFSET, OFFSET+(BOXSIZE*s), OFFSET+(size*BOXSIZE), OFFSET+(BOXSIZE*s), Color.black);
+            sc.drawLine(
+                OFFSET+(BOXSIZE*s),
+                OFFSET,
+                OFFSET+(BOXSIZE*s),
+                OFFSET+(size*BOXSIZE),
+                foreColor);
+
+            sc.drawLine(
+                OFFSET,
+                OFFSET+(BOXSIZE*s),
+                OFFSET+(size*BOXSIZE),
+                OFFSET+(BOXSIZE*s),
+                foreColor);
         }
     }
     
@@ -121,15 +149,23 @@ public class AquariumViewer implements MouseListener
     public void displayNumbers()
     {
         // TODO 10 - complete
-        sc.setFont(new Font("Consolas",1,20));
+        sc.setFont(new Font("Consolas", 1, 20));
         int[] rowTotals = puzzle.getRowTotals();
         for (int r = 0; r < rowTotals.length; r++){
-            sc.drawString(String.valueOf(rowTotals[r]), OFFSET-(BOXSIZE/2)-4, OFFSET+(BOXSIZE*r)+(BOXSIZE/2)+8, Color.black);
+            sc.drawString(
+                String.valueOf(rowTotals[r]), 
+                OFFSET-(BOXSIZE/2)-4, 
+                OFFSET+(BOXSIZE*r)+(BOXSIZE/2)+8, 
+                foreColor);
         }
         
         int[] columnTotals = puzzle.getColumnTotals();
         for (int c = 0; c < columnTotals.length; c++){
-            sc.drawString(String.valueOf(columnTotals[c]), OFFSET+(BOXSIZE*c)+(BOXSIZE/2)-4, OFFSET-(BOXSIZE/2)+8, Color.black);
+            sc.drawString(
+                String.valueOf(columnTotals[c]),
+                OFFSET+(BOXSIZE*c)+(BOXSIZE/2)-4,
+                OFFSET-(BOXSIZE/2)+8,
+                foreColor);
         }
     }
     
@@ -140,26 +176,56 @@ public class AquariumViewer implements MouseListener
     {
         // TODO 11 - complete
         int gridSize = BOXSIZE * size;
-        // Draw around entire grid
-        sc.drawRectangle(OFFSET-1, OFFSET-1, OFFSET+gridSize+1, OFFSET+2, Color.RED);//top
-        sc.drawRectangle(OFFSET-1, OFFSET-1, OFFSET+2, OFFSET+gridSize+1, Color.RED);//left
-        sc.drawRectangle(OFFSET-1, OFFSET+gridSize-2, OFFSET+gridSize+1, OFFSET+gridSize+1, Color.RED);//bottom
-        sc.drawRectangle(OFFSET+gridSize-2, OFFSET-1, OFFSET+gridSize+1, OFFSET+gridSize+1, Color.RED);//right
+        // Draw around entire grid, lines are 3 pixels wide
+        sc.drawRectangle(
+            OFFSET-1, 
+            OFFSET-1, 
+            OFFSET+gridSize+1, 
+            OFFSET+2, 
+            altColor);//top
+        sc.drawRectangle(
+            OFFSET-1, 
+            OFFSET-1, 
+            OFFSET+2, 
+            OFFSET+gridSize+1, 
+            altColor);//left
+        sc.drawRectangle(
+            OFFSET-1, 
+            OFFSET+gridSize-2, 
+            OFFSET+gridSize+1, 
+            OFFSET+gridSize+1, 
+            altColor);//bottom
+        sc.drawRectangle(
+            OFFSET+gridSize-2, 
+            OFFSET-1, 
+            OFFSET+gridSize+1, 
+            OFFSET+gridSize+1, 
+            altColor);//right
         
         int[][] aquariums = puzzle.getAquariums();
-        // Analyse each cell
+        // Draw red line on bottom or right depending on group 
         for (int x = 0; x < size; x++)
         {
             for (int y = 0; y < size; y++)
             {
                 int group = aquariums[x][y];
                 if ( (x+1 < size) && (group != aquariums[x+1][y]) )
-                {
-                    sc.drawRectangle(OFFSET + y*BOXSIZE - 1, OFFSET + (x+1)*BOXSIZE-2, OFFSET + (y+1)*BOXSIZE + 1  , OFFSET + (x+1)*BOXSIZE + 2, Color.RED);
+                {   // Draw right border
+                    sc.drawRectangle(
+                        OFFSET + y*BOXSIZE - 1, 
+                        OFFSET + (x+1)*BOXSIZE-2, 
+                        OFFSET + (y+1)*BOXSIZE + 1, 
+                        OFFSET + (x+1)*BOXSIZE + 2, 
+                        altColor);
                 }
                 if ( (y+1 < size) && (group != aquariums[x][y+1]) )
-                {
-                    sc.drawRectangle(OFFSET + (y+1)*BOXSIZE - 1, OFFSET + x*BOXSIZE - 1, OFFSET + (y+1)*BOXSIZE+2, OFFSET+(x+1)*BOXSIZE+1, Color.RED);
+                {   // Draw bottom border
+                    sc.drawRectangle(
+                        OFFSET + (y+1)*BOXSIZE - 1, 
+                        OFFSET + x*BOXSIZE - 1, 
+                        OFFSET + (y+1)*BOXSIZE+2, 
+                        OFFSET+(x+1)*BOXSIZE+1, 
+                        altColor);
                 }
             }
         }
@@ -172,11 +238,77 @@ public class AquariumViewer implements MouseListener
     {
         // TODO 12 - complete
         sc.setFont(new Font("Consolas",1,20));
-        sc.drawRectangle(0, WINDOWSIZE-BOXSIZE, WINDOWSIZE/2, WINDOWSIZE, Color.green);
-        sc.drawString("CHECK", (WINDOWSIZE/4)-32, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
         
-        sc.drawRectangle(WINDOWSIZE/2, WINDOWSIZE-BOXSIZE, WINDOWSIZE, WINDOWSIZE, Color.red);
-        sc.drawString("CLEAR", (WINDOWSIZE/4)*3-32, WINDOWSIZE-(BOXSIZE/2)+8, Color.black);
+        sc.drawRectangle(
+            0, 
+            WINDOWSIZE-BOXSIZE, 
+            WINDOWSIZE/2, 
+            WINDOWSIZE, 
+            Color.green);
+        sc.drawString(
+            "CHECK", 
+            (WINDOWSIZE/4)-32, 
+            WINDOWSIZE-(BOXSIZE/2)+8, 
+            Color.black);
+        
+        sc.drawRectangle(
+            WINDOWSIZE/2, 
+            WINDOWSIZE-BOXSIZE, 
+            WINDOWSIZE, 
+            WINDOWSIZE, 
+            Color.red);
+        sc.drawString(
+            "CLEAR", 
+            (WINDOWSIZE/4)*3-32, 
+            WINDOWSIZE-(BOXSIZE/2)+8, 
+            Color.black);
+        
+        if (puzzle.getSize() < solvePuzzleSize) {
+            sc.drawRectangle(
+                WINDOWSIZE-(BOXSIZE*3),
+                0,
+                WINDOWSIZE-BOXSIZE,
+                BOXSIZE,
+                Color.green);
+            sc.drawString(
+                "SOLVE", 
+                WINDOWSIZE-(BOXSIZE*3)+(BOXSIZE/4), 
+                (BOXSIZE/4)*3-4, 
+                Color.black);
+        }
+        
+        // Draw dark mode toggle
+        sc.drawRectangle(
+            WINDOWSIZE-BOXSIZE,
+            0,
+            WINDOWSIZE,
+            BOXSIZE,
+            Color.cyan);
+        
+        sc.setFont(new Font("Segoe UI Symbol",1,20));
+        String themeButton = "\u263E"; //Moon symbol
+        if (darkMode) {
+            themeButton = "\u263C"; //Sun symbol
+        } 
+        sc.drawString(
+            themeButton, 
+            WINDOWSIZE-(BOXSIZE/4)*3, 
+            (BOXSIZE/4)*3-4, 
+            Color.black);
+        // Draw new puzzle button
+        sc.drawRectangle(
+            WINDOWSIZE-BOXSIZE,
+            BOXSIZE,
+            WINDOWSIZE,
+            2*BOXSIZE,
+            Color.green);
+        sc.setFont(new Font("Segoe UI Symbol",1,30));
+        String newPuzzleButton = "+";
+        sc.drawString(
+            newPuzzleButton, 
+            WINDOWSIZE-(BOXSIZE/4)*3, 
+            BOXSIZE+(BOXSIZE/4)*3, 
+            Color.black);
     }
     
     /**
@@ -189,16 +321,81 @@ public class AquariumViewer implements MouseListener
         Color material;
         Space square = puzzle.getSpaces()[r][c];
         if (square == Space.WATER) {
-            material = Color.blue;
+            material = waterColor;
         } else {
-            material = Color.white;
+            material = backColor;
         }
         
-        sc.drawRectangle(OFFSET+(BOXSIZE*c), OFFSET+(BOXSIZE*r), OFFSET+(BOXSIZE*(c+1)), OFFSET+(BOXSIZE*(r+1)), material);
+        sc.drawRectangle(
+            OFFSET+(BOXSIZE*c), 
+            OFFSET+(BOXSIZE*r), 
+            OFFSET+(BOXSIZE*(c+1)), 
+            OFFSET+(BOXSIZE*(r+1)), 
+            material);
         if (square == Space.AIR) {
-            sc.drawDisc(OFFSET+(BOXSIZE*c)+(BOXSIZE/2),OFFSET+(BOXSIZE*r)+(BOXSIZE/2), BOXSIZE/4, Color.pink);
-            sc.drawDisc(OFFSET+(BOXSIZE*c)+(BOXSIZE/2),OFFSET+(BOXSIZE*r)+(BOXSIZE/2), BOXSIZE/6, Color.white);
+            sc.drawDisc(
+                OFFSET+(BOXSIZE*c)+(BOXSIZE/2),
+                OFFSET+(BOXSIZE*r)+(BOXSIZE/2), 
+                BOXSIZE/4, 
+                altColor);
+            sc.drawDisc(
+                OFFSET+(BOXSIZE*c)+(BOXSIZE/2),
+                OFFSET+(BOXSIZE*r)+(BOXSIZE/2), 
+                BOXSIZE/6, 
+                backColor);
         }
+    }
+    /**
+     * Toggles dark mode on and off.
+     * Updates colors and redraws canvas elements.
+     * Clears puzzle arrangement as to not cause errors.
+     */
+    public void toggleDarkMode()
+    {
+        if (!darkMode)
+        {
+            foreColor = new Color(245,245,245);
+            backColor = new Color(20,25,50);
+            waterColor = new Color(45,130,200);
+            altColor = new Color(180,45,45);
+
+        }
+        else
+        {
+            foreColor = Color.black;
+            backColor = Color.white;
+            waterColor = Color.blue;
+            altColor = Color.red;
+        }
+        darkMode = !darkMode;
+        sc.drawRectangle(
+            0,
+            0,
+            WINDOWSIZE,
+            WINDOWSIZE,
+            backColor); // redraw background
+        Space[][] spaces = puzzle.getSpaces();
+        for (int c = 0; c < spaces.length; c++)
+        {
+            for (int r = 0; r < spaces[0].length; r++)
+            {
+                updateSquare(c,r);
+            }
+        }
+        displayPuzzle();
+    }
+    
+    public void createNewPuzzle()
+    {
+        puzzle = CheckSolution.newPuzzle(size);
+        sc.drawRectangle(
+                    0,
+                    0,
+                    WINDOWSIZE,
+                    WINDOWSIZE,
+                    backColor);
+        this.displayPuzzle();
+        startTime = clock.instant();
     }
     
     /**
@@ -213,26 +410,97 @@ public class AquariumViewer implements MouseListener
         int x = e.getX();
         int y = e.getY();
         // If true, click was inside the grid
-        if ((OFFSET < x && x < WINDOWSIZE-OFFSET) && (OFFSET < y && y < WINDOWSIZE-OFFSET)) {
+        if ((OFFSET < x && x < WINDOWSIZE-OFFSET) 
+        && (OFFSET < y && y < WINDOWSIZE-OFFSET)) {
             int c = (x-OFFSET)/BOXSIZE;
             int r = (y-OFFSET)/BOXSIZE;
             
-            if (e.getButton() == MouseEvent.BUTTON1) { puzzle.leftClick(r,c); }
-            if (e.getButton() == MouseEvent.BUTTON3) { puzzle.rightClick(r,c); }
+            if (e.getButton() == MouseEvent.BUTTON1) {puzzle.leftClick(r,c);}
+            if (e.getButton() == MouseEvent.BUTTON3) {puzzle.rightClick(r,c);}
             
             this.updateSquare(r,c);
             this.displayGrid();
             this.displayAquariums();
-        } else if (WINDOWSIZE-OFFSET < y) {
+        } else if (WINDOWSIZE-OFFSET/2 < y) { // bottom buttons
             // If true check button pressed, else clear button pressed
-            if (x < WINDOWSIZE/2) {
+            if (x < WINDOWSIZE/2) { // left button
+                String solveText = CheckSolution.isSolution(puzzle);
+                
                 sc.setFont(new Font("Segoe UI Symbol",1,20));
-                sc.drawRectangle(0,0,WINDOWSIZE,WINDOWSIZE,Color.white);
-                sc.drawString(CheckSolution.isSolution(puzzle), 32, WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, Color.black);
+                // Redraw background
+                sc.drawRectangle(
+                    0,
+                    0,
+                    WINDOWSIZE,
+                    WINDOWSIZE,
+                    backColor);
+                sc.drawString(
+                    solveText, 
+                    32, 
+                    WINDOWSIZE-(BOXSIZE/2)-BOXSIZE+8, 
+                    foreColor);
+                if (solveText.equals("\u2713\u2713\u2713")) { // if correct
+                    solveTime = Duration.between(startTime, clock.instant());
+                    sc.drawString(
+                        "Solved in " + solveTime.getSeconds() + " seconds.", 
+                        32, 
+                        BOXSIZE/2+8, 
+                        foreColor);
+                    startTime = clock.instant();
+                }
+                // Redraw other elements
                 this.displayPuzzle();
-            } else {
+            } else { // if right button
                 puzzle.clear();
+                sc.drawRectangle(
+                    0,
+                    0,
+                    WINDOWSIZE,
+                    WINDOWSIZE,
+                    backColor);
                 this.displayPuzzle();
+                startTime = clock.instant();
+            }
+        } else if (OFFSET/2 > y) { // top buttons
+            if (x > WINDOWSIZE-BOXSIZE) { // dark mode toggle
+                toggleDarkMode();
+            } else if (x < WINDOWSIZE-BOXSIZE && x > WINDOWSIZE-(BOXSIZE*4)) {
+                if (puzzle.getSize() < solvePuzzleSize) {
+                    startTime = clock.instant();
+                    CheckSolution.solve(puzzle);
+                    solveTime = Duration.between(startTime, clock.instant());
+                    
+                    int displayTime = (int) solveTime.getSeconds();
+                    String timeText = " seconds.";
+                    if (displayTime <= 1) {
+                        displayTime = solveTime.getNano()/1000000;
+                        timeText = " milliseconds.";
+                    }
+                    sc.setFont(new Font("Consolas",1,15));
+                    sc.drawRectangle(
+                        0,
+                        0,
+                        WINDOWSIZE,
+                        WINDOWSIZE,
+                        backColor);
+                    
+                    sc.drawString(
+                        "Solved in ", 
+                        BOXSIZE, 
+                        BOXSIZE/2-4, 
+                        foreColor);
+                    sc.drawString(
+                        displayTime + timeText, 
+                        BOXSIZE, 
+                        BOXSIZE/2+12, 
+                        foreColor);
+                    
+                    this.displayPuzzle();
+                }
+            }
+        } else if (OFFSET > y) {
+            if (x > WINDOWSIZE-BOXSIZE) { // new puzzle button
+                createNewPuzzle();
             }
         }
     }

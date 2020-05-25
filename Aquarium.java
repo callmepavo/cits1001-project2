@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 /**
  * Aquarium represents a single problem in the game Aquarium.
  *
@@ -8,7 +9,6 @@ import java.util.ArrayList;
  * @author Zach Manson (22903345), Oliver Lynch (22989775)
  * @version 20200512
  */
-import java.util.ArrayList;
 public class Aquarium
 {
     private int   size;         // the board is size x size
@@ -57,7 +57,23 @@ public class Aquarium
     {
         this("Examples/a6_1.txt");
     }
-
+    
+    public Aquarium(int[][] groups, int[][] totals)
+    {
+        size = groups.length;
+        aquariums = groups;
+        columnTotals = totals[0];
+        rowTotals = totals[1];
+        spaces = new Space[size][size];
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                spaces[x][y] = Space.EMPTY;
+            }
+        }
+    }
+    
     /**
      * Returns an array containing the ints in s, 
      * each of which is separated by one space. 
@@ -175,5 +191,102 @@ public class Aquarium
                 spaces[x][y] = Space.EMPTY;
             }
         }
+    }
+    
+    /**
+     * Added for project extension: auto-solver
+     * Returns the vertical height of the specified aquarium. 
+     */
+    public int getAquariumSize(int a) {
+        int top = -1;
+        int bottom = -1;
+        
+        for (int i = 0; i < aquariums.length; i++) {
+            for (int aquarium : aquariums[i]) {
+                if (aquarium == a) {
+                    if (top == -1) {top = i;}
+                    bottom = i;
+                }
+            }
+        }
+        
+        return bottom - top + 1;
+    }
+    
+    /**
+     * Added for project extension: auto-solver
+     * Fills the specified aquarium f number of squares deep. 
+     */
+    public void fillAquarium(int a, int f) {
+        int aquariumSize = getAquariumSize(a);
+        int airLevel = aquariumSize - f;
+        boolean filling = false;
+        
+        for (int i = 0; i < aquariums.length; i++) {
+            for (int j = 0; j < aquariums[i].length; j++) {
+                if (aquariums[i][j] == a) {
+                    filling = true; 
+                    if (airLevel > 0) {
+                        spaces[i][j] = Space.AIR;
+                    } else {
+                        spaces[i][j] = Space.WATER;
+                    }
+                }
+            }
+            if (filling) {
+                airLevel--;
+            }
+        }
+    }
+    
+    public void fillAquariumRow(int r, Integer a, Space f) {
+        for (int i = 0; i < size; i++) {
+            if (a.equals(aquariums[r][i])) {
+                spaces[r][i] = f;
+            }
+        }
+    }
+    
+    /**
+     * Added for project extension: auto-solver
+     * Returns IDs of aquariums that exist in the puzzle.
+     */
+    public ArrayList<Integer> getAquariumIDs() {
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+        for (int[] row: aquariums) {
+            for (int id: row) {
+                if (!ids.contains(id)){
+                    ids.add(id);
+                }
+            }
+        }
+        return ids;
+    }
+    
+    /**
+     * Added for project extension: auto-solver
+     * Returns IDs and width of aquariums that exist on a given row.
+     */
+    public HashMap<Integer,Integer> getAquariumsOnRow(int rowNum) {
+        HashMap<Integer,Integer> ids = new HashMap<Integer,Integer>();
+        for (int id: aquariums[rowNum]) {
+            if (!ids.containsKey(id)){
+                ids.put(id,1);
+            } else {
+                ids.put(id,ids.get(id)+1); //Increment existing value by one
+            }
+        }
+        return ids;
+    }
+    
+    /**
+     * Added for project extension: auto-solver
+     * Returns true if the aqarium ID given is on the row given, else false.
+     */
+    public Boolean aquariumOnRow(int aquarium, int rowNum) {
+        for (Integer cell : aquariums[rowNum]) {
+            if (cell.equals(aquarium)) {return true;}
+        }
+        return false;
     }
 }
