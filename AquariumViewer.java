@@ -466,7 +466,22 @@ public class AquariumViewer implements MouseListener
                 toggleDarkMode();
             } else if (x < WINDOWSIZE-BOXSIZE && x > WINDOWSIZE-(BOXSIZE*4)) {
                 if (puzzle.getSize() < solvePuzzleSize) {
+                    startTime = clock.instant();
                     CheckSolution.solve(puzzle);
+                    solveTime = Duration.between(startTime, clock.instant());
+                    
+                    int displayTime = (int) solveTime.getSeconds();
+                    String timeText = " seconds.";
+                    if (displayTime <= 1) {
+                        displayTime = solveTime.getNano()/1000000;
+                        timeText = " milliseconds.";
+                    }
+                    sc.drawString(
+                        "Solved in " + displayTime + timeText, 
+                        32, 
+                        BOXSIZE/2+8, 
+                        foreColor);
+                    
                     this.displayPuzzle();
                 }
             }

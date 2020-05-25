@@ -208,12 +208,11 @@ public class CheckSolution
     }
     
     public static void solve(Aquarium p) {
-        System.out.println("----- SOLVE -----");
+        //System.out.println("----- SOLVE -----");
         ArrayList<LinkedHashMap<Integer,Boolean>>[] puzzleSolutions = new ArrayList[p.getSize()];
         ArrayList<LinkedHashMap<Integer,Boolean>> row = new ArrayList<LinkedHashMap<Integer,Boolean>>();
-        //ArrayList<LinkedHashMap<Integer,Boolean>> lastRow;
+        
         for (Integer j = p.getSize()-1; j >= 0 ; j--) {
-            //lastRow = new ArrayList<LinkedHashMap<Integer,Boolean>>(row); //Shallow copy
             row = rowSolutions(p.getAquariumsOnRow(j), p.getRowTotals()[j]);
             
             //Only rows after bottom row
@@ -229,100 +228,62 @@ public class CheckSolution
                     }
                 }
                 
-                // Check combinations on this row for tanks that must be filled.
-                // Remove combinations in previous rows where this tank isn't filled. 
-                /*
-                LinkedHashMap<Integer,Boolean> alwaysFilled = new LinkedHashMap<Integer,Boolean>();
-                for (int aquariumID : p.getAquariumsOnRow(j).keySet()) {
-                    alwaysFilled.put(aquariumID, true);
-                    for (LinkedHashMap<Integer,Boolean> solution : row) {
-                        if (!solution.get(aquariumID)) {
-                            alwaysFilled.put(aquariumID, false);
-                            break;
+                // Remove combinations in previous rows which do not allow for any possible configuration on this one.  
+                for (int n = new Integer(j)+1; n < p.getSize()-1; n++) { // For lines below this one
+                    // A shallow copy of the line's possible solutions must be made as items are removed from the real one. 
+                    ArrayList<LinkedHashMap<Integer,Boolean>> tempLineSolutions = (ArrayList<LinkedHashMap<Integer,Boolean>>) puzzleSolutions[n].clone();
+                    for (int m = 0; m < tempLineSolutions.size(); m++) { // For potential solutions in previous line
+                        
+                        Boolean anyPossible = false;
+                        for (LinkedHashMap<Integer,Boolean> possibleSolution : row) { // For potential solutions in current line
+                            
+                            Boolean possible = true;
+                            for (Entry<Integer,Boolean> tankID : possibleSolution.entrySet()) {
+                                if (tempLineSolutions.get(m).containsKey(tankID.getKey())) {
+                                    if (tankID.getValue() && !tempLineSolutions.get(m).get(tankID.getKey())) {
+                                        possible = false;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (possible) { anyPossible = true; }
+                        }
+                        if (!anyPossible) {
+                            puzzleSolutions[n].remove(tempLineSolutions.get(m));
                         }
                     }
                 }
-                System.out.println("> Line "+j+" has fixed tanks "+alwaysFilled.toString());
-                alwaysFilled.values().removeIf(n -> (!n)); // Remove all tanks which arn't always filled
-                
-                if (alwaysFilled.size() > 0) {
-                    for (int n = new Integer(j)+1; n < p.getSize()-1; n++) { // For lines below this one
-                        System.out.println("-> Testing line "+n+" which has the following options "+puzzleSolutions[n].toString());
-                        
-                        // A shallow copy of the line's possible solutions must be made as items are removed from the real one. 
-                        ArrayList<LinkedHashMap<Integer,Boolean>> tempLineSolutions = (ArrayList<LinkedHashMap<Integer,Boolean>>) puzzleSolutions[n].clone();
-                        for (int m = 0; m < tempLineSolutions.size(); m++) { // For potential solutions in line
-                            System.out.println("--> Testing solution "+tempLineSolutions.get(m).toString());
-                            for (int filled : alwaysFilled.keySet()) { // For tanks that must be filled
-                                if (tempLineSolutions.get(m).containsKey(filled)) {
-                                    if (!tempLineSolutions.get(m).get(filled)) {
-                                        System.out.println("---> Tank "+ filled +" empty, removing.");
-                                        puzzleSolutions[n].remove(tempLineSolutions.get(m));
-                                        break;
-                                    } else {
-                                        System.out.println("---> Tank "+ filled +", OK.");
-                                    }
-                                } else {
-                                    System.out.println("---> Tank "+ filled +", OK.");
-                                }
-                            }
-                        }
-                    }
-                }*/
-                for (int n = new Integer(j)+1; n < p.getSize()-1; n++) { // For lines below this one
-                        //System.out.println("> Testing line "+n+" which has the following options "+puzzleSolutions[n].toString());
-                        
-                        // A shallow copy of the line's possible solutions must be made as items are removed from the real one. 
-                        ArrayList<LinkedHashMap<Integer,Boolean>> tempLineSolutions = (ArrayList<LinkedHashMap<Integer,Boolean>>) puzzleSolutions[n].clone();
-                        for (int m = 0; m < tempLineSolutions.size(); m++) { // For potential solutions in previous line
-                            //System.out.println("-> Testing solution "+tempLineSolutions.get(m).toString());
-                            Boolean anyPossible = false;
-                            for (LinkedHashMap<Integer,Boolean> possibleSolution : row) { // For potential solutions in current line
-                                //System.out.println("--> Against "+ possibleSolution +"");
-                                Boolean possible = true;
-                                for (Entry<Integer,Boolean> tankID : possibleSolution.entrySet()) {
-                                    if (tempLineSolutions.get(m).containsKey(tankID.getKey())) {
-                                        if (tankID.getValue() && !tempLineSolutions.get(m).get(tankID.getKey())) {
-                                            //System.out.println("---> Tank "+ tankID.getKey() +" invalid.");
-                                            possible = false;
-                                            break;
-                                        } else {
-                                            //System.out.println("---> Tank "+ tankID.getKey() +", OK.");
-                                        }
-                                    } else {
-                                        //System.out.println("---> Tank "+ tankID.getKey() +", OK.");
-                                    }
-                                }
-                                if (possible) { anyPossible = true; }
-                            }
-                            if (!anyPossible) {
-                                System.out.println("--> " + tempLineSolutions.get(m).toString() + " Invalid, removing.");
-                                puzzleSolutions[n].remove(tempLineSolutions.get(m));
-                            }
-                        }
-                    }
-                
             }
-            
-            
-            
+
             puzzleSolutions[j] = row;
-        }
+        }       
         
-        // Debug print to console
-        int index = 0;
-        for (ArrayList<LinkedHashMap<Integer,Boolean>> potentialSolutions : puzzleSolutions) {
-            System.out.println(index+potentialSolutions.toString());
-            index++;
-        }
-        
+        LinkedHashMap<Integer,Integer[]> unsolved = new LinkedHashMap<>();
         // Fill in rows that we know already
         for (int i = 0; i < p.getSize(); i++) {
             if (puzzleSolutions[i].size() == 1) {
                 for (Entry<Integer,Boolean> entry : puzzleSolutions[i].get(0).entrySet()) {
                     p.fillAquariumRow(i,entry.getKey(),entry.getValue()? Space.WATER : Space.AIR);
                 }
-            } 
+            } else {
+                unsolved.put(i,new Integer[]{puzzleSolutions[i].size()-1,0});
+            }
+        }
+        
+        // If there are unsolved rows, brute force.
+        
+        if (unsolved.size() != 0) {
+            String solveText = "";
+            while (solveText != "\u2713\u2713\u2713") {
+                for (Entry<Integer,Integer[]> solutionData : unsolved.entrySet()) {
+                    int i = solutionData.getKey();
+                    for (Entry<Integer,Boolean> entry : puzzleSolutions[i].get(solutionData.getValue()[1]).entrySet()) {
+                        p.fillAquariumRow(i,entry.getKey(),entry.getValue()? Space.WATER : Space.AIR);
+                    }
+                }
+                solveText = CheckSolution.isSolution(p);
+                unsolved = incrementSolutions(unsolved);
+            }
         }
     }
     
@@ -362,6 +323,7 @@ public class CheckSolution
      * TODO:
      * Added for project extension: auto-solver
      * Increments given aquarium combination by one.
+     * Operates in a binary counting fashion
      */
     private static LinkedHashMap<Integer,Boolean> incrementAquariums(LinkedHashMap<Integer,Boolean> rowAquariums) {
         Integer i = 0;
@@ -380,6 +342,28 @@ public class CheckSolution
             rowAquariums.put(key,false);
         }
         return rowAquariums;
+    }
+    
+    private static LinkedHashMap<Integer,Integer[]> incrementSolutions(LinkedHashMap<Integer,Integer[]> solutionMap) {
+        Integer i = 0;
+        for (int key : solutionMap.keySet()) {
+            Integer[] rowData = solutionMap.get(key);
+            if (rowData[0] > rowData[1]) {
+                rowData[1] += 1;
+                    
+                i = key;
+                break;
+            }
+        }
+        
+        for (int key : solutionMap.keySet()) {
+            if (i.equals(key)) {
+                break;
+            }
+            Integer[] rowData = solutionMap.get(key);
+            rowData[1] = 0;
+        }
+        return solutionMap;
     }
     
     private static LinkedHashMap<Integer,Boolean> deepCopy(LinkedHashMap<Integer,Boolean> original) {
