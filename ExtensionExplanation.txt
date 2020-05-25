@@ -6,10 +6,10 @@ Dark Mode:
 To toggle dark mode there is a cyan button with a moon symbol in the top right corner. Clicking this switches the colour palatte of the game, maintaining the player's current layout.  Clicking the button again toggle the palatte back to the original colours.
 
 Timer:
-Once the player finds the correct solution to the puzzle, the game displays the time taken in seconds they took.  This counter is reset when they find the correct solution or when they clear the grid.
+Once the player finds the correct solution to the puzzle, the game displays the time taken in seconds they took.  This counter is reset when they find the correct solution or when they clear the grid.  For the autosolver this time may be measured in milliseconds.
 
 Puzzle generator:
 There is a green plus button on the right side.  Clicking this creates a new completely random valid puzzle of the same size.  This also resets the timer.
 
 Auto-solve:
-This can be activated by pressing the SOLVE button in the top right corner.  Finds solution to the current puzzle.  // mention the size limitation?
+This can be activated by pressing the SOLVE button in the top right corner.  Finds solution to the current puzzle.
