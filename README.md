@@ -1,8 +1,10 @@
 # CITS1001-Project2
 A Java program to allow a user to play the game Aquarium
+
 + Submission deadline: 5pm Friday 29 May 2020
 + Submit via [cssubmit](https://secure.csse.uwa.edu.au/run/cssubmit)
 + Value: 25% of CITS1001
+
 ## Todos:
 + ~~Add our names and student IDs to each file~~
 + find out what we have to do in the way of error checking
