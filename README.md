@@ -1,6 +1,8 @@
 # Aquarium
 A puzzle game written in Java.
 
+Final Mark: 100%
+
 + Submission deadline: 5pm Friday 29 May 2020
 + Submit via [cssubmit](https://secure.csse.uwa.edu.au/run/cssubmit)
 + Value: 25% of CITS1001
