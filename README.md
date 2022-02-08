@@ -16,6 +16,7 @@ java Run [gridsize]
 CITS1001 Project 2
 Final Grade: 100%
 
+
 + Submission deadline: 5pm Friday 29 May 2020
 + Submit via [cssubmit](https://secure.csse.uwa.edu.au/run/cssubmit)
 + Value: 25% of CITS1001
