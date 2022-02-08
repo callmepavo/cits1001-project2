@@ -1,8 +1,4 @@
-import java.util.ArrayList;
-import java.lang.Math;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
+import java.util.Random;
 /**
  * CheckSolution is a utility class which can check if
  * a board position in an Aquarium puzzle is a solution.
@@ -206,273 +202,120 @@ public class CheckSolution
         }
         return "\u2713\u2713\u2713";
     }
-    
-    public static void solve(Aquarium p) {
-        //System.out.println("----- SOLVE -----");
-        ArrayList<LinkedHashMap<Integer,Boolean>>[] puzzleSolutions = new ArrayList[p.getSize()];
-        ArrayList<LinkedHashMap<Integer,Boolean>> row = new ArrayList<LinkedHashMap<Integer,Boolean>>();
         
-        for (Integer j = p.getSize()-1; j >= 0 ; j--) {
-            row = rowSolutions(p.getAquariumsOnRow(j), p.getRowTotals()[j]);
-            
-            //Only rows after bottom row
-            if (j != p.getSize()-1) {
-                // Check combinations on this row with the combinations on the previous row
-                // If a tank is filled on this row and empty on the previous, remove that combination.
-                for (int n = 0; n < row.size(); n++) {
-                    if (checkRow(row.get(n),puzzleSolutions[j+1])) {
-                        //System.out.println("Removing "+j+" "+row.get(n).toString());
-                        row.remove(n);
-                    } else {
-                        //System.out.println("Keeping  "+j+" "+row.get(n).toString());
-                    }
-                }
-                
-                // Remove combinations in previous rows which do not allow for any possible configuration on this one.  
-                for (int n = new Integer(j)+1; n < p.getSize()-1; n++) { // For lines below this one
-                    // A shallow copy of the line's possible solutions must be made as items are removed from the real one. 
-                    ArrayList<LinkedHashMap<Integer,Boolean>> tempLineSolutions = (ArrayList<LinkedHashMap<Integer,Boolean>>) puzzleSolutions[n].clone();
-                    for (int m = 0; m < tempLineSolutions.size(); m++) { // For potential solutions in previous line
-                        
-                        Boolean anyPossible = false;
-                        for (LinkedHashMap<Integer,Boolean> possibleSolution : row) { // For potential solutions in current line
-                            
-                            Boolean possible = true;
-                            for (Entry<Integer,Boolean> tankID : possibleSolution.entrySet()) {
-                                if (tempLineSolutions.get(m).containsKey(tankID.getKey())) {
-                                    if (tankID.getValue() && !tempLineSolutions.get(m).get(tankID.getKey())) {
-                                        possible = false;
-                                        break;
-                                    }
-                                }
-                            }
-                            if (possible) { anyPossible = true; }
-                        }
-                        if (!anyPossible) {
-                            puzzleSolutions[n].remove(tempLineSolutions.get(m));
-                        }
-                    }
-                }
-            }
-
-            puzzleSolutions[j] = row;
-        }       
-        
-        LinkedHashMap<Integer,Integer[]> unsolved = new LinkedHashMap<>();
-        // Fill in rows that we know already
-        for (int i = 0; i < p.getSize(); i++) {
-            if (puzzleSolutions[i].size() == 1) {
-                for (Entry<Integer,Boolean> entry : puzzleSolutions[i].get(0).entrySet()) {
-                    p.fillAquariumRow(i,entry.getKey(),entry.getValue()? Space.WATER : Space.AIR);
-                }
-            } else {
-                unsolved.put(i,new Integer[]{puzzleSolutions[i].size()-1,0});
-            }
-        }
-        
-        // If there are unsolved rows, brute force.
-        
-        if (unsolved.size() != 0) {
-            String solveText = "";
-            while (solveText != "\u2713\u2713\u2713") {
-                for (Entry<Integer,Integer[]> solutionData : unsolved.entrySet()) {
-                    int i = solutionData.getKey();
-                    for (Entry<Integer,Boolean> entry : puzzleSolutions[i].get(solutionData.getValue()[1]).entrySet()) {
-                        p.fillAquariumRow(i,entry.getKey(),entry.getValue()? Space.WATER : Space.AIR);
-                    }
-                }
-                solveText = CheckSolution.isSolution(p);
-                unsolved = incrementSolutions(unsolved);
-            }
-        }
-    }
-    
-    /**
-     * TODO:
-     * Added for project extension: auto-solver
-     * Returns an arraylist of different combinations of aquariums that correctly add to the row sum.
-     */
-    private static ArrayList<LinkedHashMap<Integer,Boolean>> rowSolutions(HashMap<Integer,Integer> rowAquariums, int rowTotal) {
-        double n = Math.pow(2,rowAquariums.size());
-        ArrayList<LinkedHashMap<Integer,Boolean>> rowCombinations = new ArrayList<LinkedHashMap<Integer,Boolean>>();
-        LinkedHashMap<Integer,Boolean> rowCombination = new LinkedHashMap<Integer,Boolean>();
-        for (int k : rowAquariums.keySet()) { //Initialise aquariums as false
-            rowCombination.put(k,false);
-        }
-        
-        for (int i = 0; i < n; i++) {
-            Integer sum = 0;
-            for (Entry<Integer,Boolean> aquarium : rowCombination.entrySet()) {
-                if (aquarium.getValue()) {
-                    sum += rowAquariums.get(aquarium.getKey());
-                }
-                if (sum > rowTotal) {
-                    break;
-                }
-            }
-            if (sum.equals(rowTotal)) {
-                rowCombinations.add(deepCopy(rowCombination));
-            }
-            rowCombination = incrementAquariums(rowCombination);
-        }
-        
-        return rowCombinations;
-    }
-    
-    /**
-     * TODO:
-     * Added for project extension: auto-solver
-     * Increments given aquarium combination by one.
-     * Operates in a binary counting fashion
-     */
-    private static LinkedHashMap<Integer,Boolean> incrementAquariums(LinkedHashMap<Integer,Boolean> rowAquariums) {
-        Integer i = 0;
-        for (int key : rowAquariums.keySet()) {
-            if (!rowAquariums.get(key)) {
-                rowAquariums.put(key,true);
-                i = key;
-                break;
-            }
-        }
-        
-        for (int key : rowAquariums.keySet()) {
-            if (i.equals(key)) {
-                break;
-            }
-            rowAquariums.put(key,false);
-        }
-        return rowAquariums;
-    }
-    
-    private static LinkedHashMap<Integer,Integer[]> incrementSolutions(LinkedHashMap<Integer,Integer[]> solutionMap) {
-        Integer i = 0;
-        for (int key : solutionMap.keySet()) {
-            Integer[] rowData = solutionMap.get(key);
-            if (rowData[0] > rowData[1]) {
-                rowData[1] += 1;
-                    
-                i = key;
-                break;
-            }
-        }
-        
-        for (int key : solutionMap.keySet()) {
-            if (i.equals(key)) {
-                break;
-            }
-            Integer[] rowData = solutionMap.get(key);
-            rowData[1] = 0;
-        }
-        return solutionMap;
-    }
-    
-    private static LinkedHashMap<Integer,Boolean> deepCopy(LinkedHashMap<Integer,Boolean> original) {
-        // Create a deepcopy so the original can be used for further processing
-        LinkedHashMap<Integer,Boolean> copy = new LinkedHashMap<Integer,Boolean>();
-        for (Entry<Integer,Boolean> entry : original.entrySet()) {
-            copy.put(new Integer(entry.getKey()),new Boolean(entry.getValue()));
-        }
-        return copy;
-    }
-    
-    private static Boolean checkRow(LinkedHashMap<Integer,Boolean> n, ArrayList<LinkedHashMap<Integer,Boolean>> lastRow) {
-        Boolean remove = true;
-        if (lastRow.size() == 0) { 
-            System.out.println("Previous row empty");
-            return false; 
-        }
-        
-        for (LinkedHashMap<Integer,Boolean> solution : lastRow) {
-            Boolean valid = true;
-            for (Entry<Integer,Boolean> entry : n.entrySet()) {
-                if (solution.containsKey(entry.getKey())) {
-                    if (!solution.get(entry.getKey()) && entry.getValue()){
-                        valid = false;
-                    }
-                }
-            }
-            if (valid && remove) {
-                remove = false;
-            }
-        }
-        
-        return remove;
-    }
-    
     /**
      * Returns a new aquarium object with a randomly generated
      * puzzle of size size.
      */
     public static Aquarium newPuzzle(int size)
     {
+        System.out.println("Generating new puzzle");
         int[][] groups = generateGroups(size);
         Space[][] spaces = new Space[size][size];
         fillAllGroups(groups, spaces);
         int[][] totals = generateTotals(spaces);
-        Aquarium p = new Aquarium(groups, totals);
+        Aquarium p = new Aquarium(groups, totals, spaces);
 
         return p;
     }
     
-    /** 
-     * Returns an int[][] of new group shapes of size size
-     */
-    private static int[][] generateGroups(int size)
-    {
+
+    public static int[][] generateGroups(int size) {
+        Random rng = new Random();
         int[][] groups = new int[size][size];
-        double rnd = 0.0;
-        int currentMax = 0;
-        for (int r = 0; r < size; r++)
-        {
-            for (int c = 0; c < size; c++)
-            {
-                
-                boolean aboveExists = r != 0;
-                boolean leftExists = c != 0;
-                rnd = Math.random()*10;
-                if (r == size-1 && c == size-1) // if last cell
-                { // ensure its always the highest value
-                    if (groups[r][c-1] == currentMax)
-                    {
-                        groups[r][c] = groups[r][c-1];
-                        continue;
-                    }
-                } 
-                else if (aboveExists && leftExists) // 3 options
-                {
-                    if (rnd < 4)
-                    {
-                        groups[r][c] = groups[r][c-1];
-                        continue;
-                    }
-                    else if (rnd > 6)
-                    {
-                        groups[r][c] = groups[r-1][c];
-                        continue;
-                    }
-                    
-                }
-                else if (aboveExists) // 2 options
-                {
-                    if (rnd < 5)
-                    {
-                        groups[r][c] = groups[r-1][c];
-                        continue;
-                    }
-                }
-                else if (leftExists) // 2 options
-                {
-                    if (rnd < 5)
-                    {
-                        groups[r][c] = groups[r][c-1];
-                        continue;
-                    }
-                }
-                currentMax++;
-                groups[r][c] = currentMax;
+        int cellCount = size * size;
+        int groupCount = size*size/5;
+
+        // Set all cells to negative group
+        for (int i = 0; i < cellCount; i++) {
+            int r = i / size;
+            int c = i % size;
+            groups[r][c] = -1;
+            //System.out.println(groups[r][c]);
+        }
+        System.out.println("groupCount: "+ groupCount);
+        // Generate group roots
+        for (int i = 0; i < groupCount;) {
+            int r = rng.nextInt(size);
+            int c = rng.nextInt(size);
+            System.out.println("Attempting to place root at " + r + " " + c);
+            System.out.println(groups[r][c] == -1);
+            if (groups[r][c] == -1) {
+                groups[r][c] = i;
+                i++;
+                System.out.println("Placed root!");
             }
         }
-    return groups;    
+        System.out.println("Set group roots");
+
+        int assignedCells = groupCount;
+        while (assignedCells < cellCount) {
+            for (int i = 0; i < cellCount; i++) {
+                int r = i / size;
+                int c = i % size;
+                // Skips cells already filled in
+                if (groups[r][c] != -1) continue;
+                
+                int up = -1;
+                int down = -1;
+                int left = -1;
+                int right = -1;
+                if (r-1 >= 0) {
+                    up = groups[r-1][c];
+                }
+
+                if (r+1 < size) {
+                    down = groups[r+1][c];
+                }
+
+                if (c-1 >= 0) {
+                    left = groups[r][c-1];
+                }
+
+                if (c+1 < size) {
+                    right = groups[r][c+1];
+                }
+
+                if (up != -1) {
+                    if (rng.nextInt(4) == 0) {
+                        System.out.println("Assigning " + r + " " + c);
+                        groups[r][c] = up;
+                        assignedCells++;
+                        continue;
+                    }
+                }
+
+                if (down != -1) {
+                    if (rng.nextInt(4) == 0) {
+                        System.out.println("Assigning " + r + " " + c);
+                        groups[r][c] = down;
+                        assignedCells++;
+                        continue;
+                    }
+                }
+
+                if (left != -1) {
+                    if (rng.nextInt(4) == 0) {
+                        System.out.println("Assigning " + r + " " + c);
+                        groups[r][c] = left;
+                        assignedCells++;
+                        continue;
+                    }
+                }
+
+                if (right != -1) {
+                    if (rng.nextInt(4) == 0) {
+                        System.out.println("Assigning " + r + " " + c);
+                        groups[r][c] = right;
+                        assignedCells++;
+                        continue;
+                    }
+                }
+
+            }
+        }
+
+        return groups;
     }
     
     /**
@@ -480,8 +323,10 @@ public class CheckSolution
      */
     private static void fillAllGroups(int[][] groups, Space[][] spaces)
     {
-        int maxGroup = groups[groups.length-1][groups.length-1];
-        for (int groupNum = 1; groupNum <= maxGroup; groupNum++)
+        
+        int groupCount = spaces.length*spaces.length / 5;
+        System.out.println("spaces.lenght in fillAllGroups: " + spaces.length);
+        for (int groupNum = 0; groupNum < groupCount; groupNum++)
         {
             fillGroup(groupNum, groups, spaces);
         }
@@ -522,7 +367,7 @@ public class CheckSolution
             }
         }
         
-        java.util.Random rnd = new java.util.Random();
+        Random rnd = new Random();
         
         int height = bottomRow-topRow+1;
         int rowsToFill = rnd.nextInt(height+1); //number of rows to fill

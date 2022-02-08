@@ -1,5 +1,20 @@
-# CITS1001-Project2
-A Java program to allow a user to play the game Aquarium
+# Aquarium
+
+Created by Zach Manson & Oliver Lynch 
+
+A Java program to allow a user to play the game Aquarium.
+
+![Aquarium Game](screenshot.png)
+
+To compile and run from source:
+
+```
+make
+java Run [gridsize]
+```
+
+CITS1001 Project 2
+Final Grade: 100%
 
 + Submission deadline: 5pm Friday 29 May 2020
 + Submit via [cssubmit](https://secure.csse.uwa.edu.au/run/cssubmit)

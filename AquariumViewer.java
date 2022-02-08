@@ -10,7 +10,6 @@
  */
 import java.awt.*;
 import java.awt.event.*; 
-import javax.swing.SwingUtilities;
 import java.time.*;
 
 public class AquariumViewer implements MouseListener
@@ -47,7 +46,7 @@ public class AquariumViewer implements MouseListener
         
         WINDOWSIZE = (OFFSET*2) + (BOXSIZE*size);
         sc = new SimpleCanvas(
-            "Aquarium Puzzle - Zach & Oliver", 
+            "Aquarium", 
             WINDOWSIZE, WINDOWSIZE, backColor);
 
         sc.addMouseListener(this);
@@ -63,7 +62,7 @@ public class AquariumViewer implements MouseListener
      */
     public AquariumViewer(int n)
     {
-        this(new Aquarium("Examples/a" + n / 10 + "_" + n % 10 + ".txt"));
+        this(CheckSolution.newPuzzle(n));
     }
     
     /**
@@ -71,7 +70,7 @@ public class AquariumViewer implements MouseListener
      */
     public AquariumViewer()
     {
-        this(61);
+        this(CheckSolution.newPuzzle(8));
     }
     
     /**
@@ -108,6 +107,7 @@ public class AquariumViewer implements MouseListener
     {
         // TODO 13 - complete
         Space[][] spaces = puzzle.getSpaces();
+        System.out.println("spaces.length:"+spaces.length);
         for (int r = 0; r < spaces.length; r++){
             for (int c = 0; c < spaces[r].length; c++) {
                 this.updateSquare(r,c);
@@ -473,16 +473,10 @@ public class AquariumViewer implements MouseListener
             } else if (x < WINDOWSIZE-BOXSIZE && x > WINDOWSIZE-(BOXSIZE*4)) {
                 if (puzzle.getSize() < solvePuzzleSize) {
                     startTime = clock.instant();
-                    CheckSolution.solve(puzzle);
-                    solveTime = Duration.between(startTime, clock.instant());
-                    
-                    int displayTime = (int) solveTime.getSeconds();
-                    String timeText = " seconds.";
-                    if (displayTime <= 1) {
-                        displayTime = solveTime.getNano()/1000000;
-                        timeText = " milliseconds.";
-                    }
-                    sc.setFont(new Font("Consolas",1,15));
+                    System.out.println("Solving puzzle...");
+                    puzzle.setSolution();
+                    //CheckSolution.solve(puzzle);
+
                     sc.drawRectangle(
                         0,
                         0,
@@ -490,16 +484,7 @@ public class AquariumViewer implements MouseListener
                         WINDOWSIZE,
                         backColor);
                     
-                    sc.drawString(
-                        "Solved in ", 
-                        BOXSIZE, 
-                        BOXSIZE/2-4, 
-                        foreColor);
-                    sc.drawString(
-                        displayTime + timeText, 
-                        BOXSIZE, 
-                        BOXSIZE/2+12, 
-                        foreColor);
+
                     
                     this.displayPuzzle();
                 }

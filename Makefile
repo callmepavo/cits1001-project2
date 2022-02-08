@@ -5,7 +5,7 @@ JC = javac
 .java.class:
 	$(JC) $(JFLAGS) $*.java
 
-CLASSES = Aquarium.java AquariumViewer.java CheckSolution.java FileIO.java Run.java
+CLASSES = Aquarium.java AquariumViewer.java CheckSolution.java Run.java Space.java SimpleCanvas.java
 
 default: classes
 

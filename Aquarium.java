@@ -20,47 +20,14 @@ public class Aquarium
     private int[][] aquariums;
     // the board divided into spaces, each empty, water, or air
     private Space[][] spaces;
-
-    /**
-     * Constructor for objects of class Aquarium. 
-     * Creates, initialises, and populates all of the fields.
-     */
-    public Aquarium(String filename)
-    {
-        // TODO 3 - complete
-        FileIO file = new FileIO(filename);
-        ArrayList<String> lines = file.getLines();
-        columnTotals = parseLine(lines.get(0));
-        rowTotals = parseLine(lines.get(1));
-        size = rowTotals.length;
-        
-        aquariums = new  int[size][size];
-        for (int i = 0; i < size; i++)
-        {
-            aquariums[i] = parseLine(lines.get(i+3));
-        }
-        
-        spaces = new Space[size][size];
-        for (int x = 0; x < size; x++)
-        {
-            for (int y = 0; y < size; y++)
-            {
-                spaces[x][y] = Space.EMPTY;
-            }
-        }
-    }
     
-    /**
-     * Uses the provided example file on the LMS page.
-     */
-    public Aquarium()
-    {
-        this("Examples/a6_1.txt");
-    }
+    private Space[][] solution;
     
-    public Aquarium(int[][] groups, int[][] totals)
+    public Aquarium(int[][] groups, int[][] totals, Space[][] solution)
     {
+        this.solution = solution;
         size = groups.length;
+        System.out.println("size as reported by Aquarium constructor: "+ size);
         aquariums = groups;
         columnTotals = totals[0];
         rowTotals = totals[1];
@@ -72,25 +39,6 @@ public class Aquarium
                 spaces[x][y] = Space.EMPTY;
             }
         }
-    }
-    
-    /**
-     * Returns an array containing the ints in s, 
-     * each of which is separated by one space. 
-     * e.g. if s = "1 299 34 5", it will return {1,299,34,5} 
-     */
-    public static int[] parseLine(String s)
-    {
-        // TODO 2 - complete
-        String[] numsAsStr = s.split(" ");
-        int[] numsAsInt = new int[numsAsStr.length];
-        
-        for (int i = 0; i < numsAsStr.length; i++)
-        {
-            numsAsInt[i] = Integer.parseInt(numsAsStr[i]);
-        }
-        
-        return numsAsInt;
     }
     
     /**
@@ -135,9 +83,23 @@ public class Aquarium
     public Space[][] getSpaces()
     {
         // TODO 1e - complete
+        System.out.println("Getting spaces");
+        if (spaces == null) System.out.println("spaces is null");
         return spaces;
     }
+
+    public Space[][] getSolution() throws Exception {
+        if (solution == null) {
+            throw new Exception("Pregen puzzles have no solution");
+        }
+        return solution;
+    }
     
+    public void setSolution() {
+        spaces = solution;
+    }
+
+
     /**
      * Performs a left click on Square r,c if the indices are legal, o/w does nothing. 
      * A water space becomes empty; other spaces become water. 
@@ -245,48 +207,5 @@ public class Aquarium
                 spaces[r][i] = f;
             }
         }
-    }
-    
-    /**
-     * Added for project extension: auto-solver
-     * Returns IDs of aquariums that exist in the puzzle.
-     */
-    public ArrayList<Integer> getAquariumIDs() {
-        ArrayList<Integer> ids = new ArrayList<Integer>();
-        for (int[] row: aquariums) {
-            for (int id: row) {
-                if (!ids.contains(id)){
-                    ids.add(id);
-                }
-            }
-        }
-        return ids;
-    }
-    
-    /**
-     * Added for project extension: auto-solver
-     * Returns IDs and width of aquariums that exist on a given row.
-     */
-    public HashMap<Integer,Integer> getAquariumsOnRow(int rowNum) {
-        HashMap<Integer,Integer> ids = new HashMap<Integer,Integer>();
-        for (int id: aquariums[rowNum]) {
-            if (!ids.containsKey(id)){
-                ids.put(id,1);
-            } else {
-                ids.put(id,ids.get(id)+1); //Increment existing value by one
-            }
-        }
-        return ids;
-    }
-    
-    /**
-     * Added for project extension: auto-solver
-     * Returns true if the aqarium ID given is on the row given, else false.
-     */
-    public Boolean aquariumOnRow(int aquarium, int rowNum) {
-        for (Integer cell : aquariums[rowNum]) {
-            if (cell.equals(aquarium)) {return true;}
-        }
-        return false;
     }
 }
