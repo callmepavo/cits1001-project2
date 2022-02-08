@@ -36,6 +36,7 @@ public class SimpleCanvas
         graphic.setColor(Color.black);
         frame.setVisible(true);
         this.autoRepaint = true;
+        frame.setDefaultCloseOperation(3);
     }
     
    /**
