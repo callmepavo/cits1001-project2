@@ -8,14 +8,26 @@ A Java program to allow a user to play the game Aquarium.
 
 To compile and run from source:
 
-```
+```bash
 make
 java Run [gridsize]
+```
+
+To run from .jar release:
+```bash
+java -jar Aquarium.jar
 ```
 
 CITS1001 Project 2
 Final Grade: 100%
 
+## Gameplay
+
+The game is about filling aqariums (cells grouped by red outline) to different heights.  Left click to fill in boxes with water.  Each aquarium must be filled from bottom to top, and each row of an aquarium must be filled at the same time.  The goal of the game is to fill the aquariums in an arrangement so that the number of filled boxes in each row and column matches the corresponding number on the top and left of the grid.
+
+To check if your arrangement is correct, press the `CHECK` button.  To find a solution click the `SOLVE` button.  To generate a new randomly generated puzzle, click the `+` button.
+
+## Project Details
 
 + Submission deadline: 5pm Friday 29 May 2020
 + Submit via [cssubmit](https://secure.csse.uwa.edu.au/run/cssubmit)
